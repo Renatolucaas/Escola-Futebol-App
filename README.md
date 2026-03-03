@@ -117,3 +117,4 @@ Versionamento	Git/GitHub
 ## 👥 **Equipe**
 
 - **Renato Lucas** - Desenvolvedor Mobile
+- **Nani Costa** - Desenvolvedora Mobile
