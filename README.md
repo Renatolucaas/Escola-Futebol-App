@@ -118,3 +118,6 @@ Versionamento	Git/GitHub
 
 - **Renato Lucas** - Desenvolvedor Mobile
 - **Nani Costa** - Desenvolvedora Mobile
+- **Gabriel Herbst** - Desenvolvedora Mobile
+- **Uirá Seeberger** - Desenvolvedora Mobile
+
