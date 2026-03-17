@@ -38,13 +38,17 @@ Período	Entregas	Status
 
 
 11 Mar - 17 Mar	• Configuração do Firebase
-• Estrutura do Firestore Database
-• Autenticação de usuários	⏳
+• Estrutura do Realtime Database
+• Autenticação de usuários	⏳  
+
+
 
 
 18 Mar - 24 Mar	• Layouts XML implementados
 • Navegação entre telas
 • Componentes básicos	⏳
+
+
 
 
 📍 Fase 2: Funcionalidades Core (Mar - Abr)
@@ -54,9 +58,11 @@ Período	Entregas	Status
 • Testes unitários iniciais	⏳
 
 
+
 01 Abr - 07 Abr	• Calendário interativo
 • Filtros por tipo de evento
 • Testes com usuários reais	⏳
+
 
 
 08 Abr - 14 Abr	• Ajustes de usabilidade
@@ -64,12 +70,15 @@ Período	Entregas	Status
 • Melhorias de segurança	⏳
 
 
+
 15 Abr - 21 Abr	• Versão Beta para testes
 • Correção de bugs críticos
 • Preparação para lançamento	⏳
 
 
+
 📍 Fase 3: Expansão e Refinamento (Abr - Mai)
+
 Período	Entregas	Status
 22 Abr - 28 Abr	• Módulo de Presença
 - Marcação de comparecimento
@@ -82,11 +91,14 @@ Período	Entregas	Status
 - Notificações push
 - Alertas de alterações	⏳
 
+  
+
 
 06 Mai - 12 Mai	• Relatórios e Estatísticas
 - Dashboard com gráficos
 - Frequência por categoria
 - Exportação de dados	⏳
+  
 
 
 13 Mai - 19 Mai	• Compartilhamento Social
