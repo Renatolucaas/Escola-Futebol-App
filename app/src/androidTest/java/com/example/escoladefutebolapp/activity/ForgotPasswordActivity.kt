@@ -256,3 +256,47 @@ class ForgotPasswordActivity : AppCompatActivity() {
 //            visibility = View.GONE
 //        }
 //
+//        // Montagem da UI
+//        emailLayout.addView(emailLabel)
+//        emailLayout.addView(emailInput)
+//
+//        tokenSection.addView(tokenTitle)
+//        tokenSection.addView(tokenInput)
+//        tokenSection.addView(newPasswordInput)
+//        tokenSection.addView(confirmPasswordInput)
+//        tokenSection.addView(btnResetPassword)
+//
+//        mainLayout.addView(titleText)
+//        mainLayout.addView(subtitleText)
+//        mainLayout.addView(emailLayout)
+//        mainLayout.addView(btnRequestReset)
+//        mainLayout.addView(tokenSection)
+//        mainLayout.addView(btnBackToLogin)
+//        mainLayout.addView(progressBar)
+//
+//        scrollView.addView(mainLayout)
+//        setContentView(scrollView)
+//    }
+//
+//    private fun setupViewModel() {
+//        val factory = ForgotPasswordViewModelFactory(
+//            UserRepository(FirebaseFirestore.getInstance()),
+//            EmailService()
+//        )
+//        viewModel = ViewModelProvider(this, factory)[ForgotPasswordViewModel::class.java]
+//    }
+//
+//    private fun setupObservers() {
+//        viewModel.uiState.observe(this) { state ->
+//            handleUiState(state)
+//        }
+//
+//        viewModel.navigateToLogin.observe(this) { shouldNavigate ->
+//            if (shouldNavigate) {
+//                navigateToLogin()
+//                viewModel.resetNavigation()
+//            }
+//        }
+//    }
+//
+
