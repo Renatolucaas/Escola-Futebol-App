@@ -38,4 +38,87 @@ class ForgotPasswordActivity : AppCompatActivity() {
 //
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
-//
+////
+////        // Cria a UI programaticamente
+////        createUI()
+////
+////        // Configura o ViewModel
+////        setupViewModel()
+////
+////        setupObservers()
+////        setupClickListeners()
+////    }
+////
+////    private fun createUI() {
+////        // Configuração do ScrollView principal
+////        scrollView = ScrollView(this).apply {
+////            layoutParams = ViewGroup.LayoutParams(
+////                ViewGroup.LayoutParams.MATCH_PARENT,
+////                ViewGroup.LayoutParams.MATCH_PARENT
+////            )
+////            setPadding(50, 30, 50, 30)
+////        }
+////
+////        // Layout principal
+////        mainLayout = LinearLayout(this).apply {
+////            layoutParams = ViewGroup.LayoutParams(
+////                ViewGroup.LayoutParams.MATCH_PARENT,
+////                ViewGroup.LayoutParams.WRAP_CONTENT
+////            )
+////            orientation = LinearLayout.VERTICAL
+////        }
+////
+////        // Título
+////        titleText = TextView(this).apply {
+////            layoutParams = LinearLayout.LayoutParams(
+////                LinearLayout.LayoutParams.MATCH_PARENT,
+////                LinearLayout.LayoutParams.WRAP_CONTENT
+////            ).apply {
+////                gravity = Gravity.CENTER
+////                setMargins(0, 0, 0, 20)
+////            }
+////            text = "Recuperar Senha"
+////            textSize = 24f
+////            setTypeface(null, Typeface.BOLD)
+////            setTextColor(resources.getColor(android.R.color.black, null))
+////        }
+////
+////        // Subtítulo
+////        subtitleText = TextView(this).apply {
+////            layoutParams = LinearLayout.LayoutParams(
+////                LinearLayout.LayoutParams.MATCH_PARENT,
+////                LinearLayout.LayoutParams.WRAP_CONTENT
+////            ).apply {
+////                gravity = Gravity.CENTER
+////                setMargins(0, 0, 0, 50)
+////            }
+////            text = "Digite seu email para receber um código de verificação"
+////            textSize = 14f
+////            setTextColor(resources.getColor(android.R.color.darker_gray, null))
+////            gravity = Gravity.CENTER
+////        }
+////
+////        // Layout do email
+////        emailLayout = LinearLayout(this).apply {
+////            layoutParams = LinearLayout.LayoutParams(
+////                LinearLayout.LayoutParams.MATCH_PARENT,
+////                LinearLayout.LayoutParams.WRAP_CONTENT
+////            ).apply {
+////                setMargins(0, 0, 0, 30)
+////            }
+////            orientation = LinearLayout.VERTICAL
+////        }
+////
+////        // Label do email
+////        val emailLabel = TextView(this).apply {
+////            layoutParams = LinearLayout.LayoutParams(
+////                LinearLayout.LayoutParams.WRAP_CONTENT,
+////                LinearLayout.LayoutParams.WRAP_CONTENT
+////            ).apply {
+////                setMargins(0, 0, 0, 10)
+////            }
+////            text = "Email"
+////            textSize = 16f
+////            setTextColor(resources.getColor(android.R.color.black, null))
+////        }
+////
