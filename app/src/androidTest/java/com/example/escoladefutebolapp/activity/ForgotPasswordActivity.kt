@@ -366,3 +366,50 @@ class ForgotPasswordActivity : AppCompatActivity() {
 //        }
 //    }
 //
+//    private fun showLoading() {
+//        progressBar.isVisible = true
+//        btnRequestReset.isEnabled = false
+//        btnResetPassword.isEnabled = false
+//    }
+//
+//    private fun hideLoading() {
+//        progressBar.isVisible = false
+//        btnRequestReset.isEnabled = true
+//        btnResetPassword.isEnabled = true
+//    }
+//
+//    private fun showSuccess(message: String) {
+//        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+//    }
+//
+//    private fun showError(message: String) {
+//        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+//    }
+//
+//    private fun showTokenInputSection() {
+//        tokenSection.visibility = View.VISIBLE
+//        btnResetPassword.visibility = View.VISIBLE
+//        tokenInput.requestFocus()
+//    }
+//
+//    private fun showLoginButton() {
+//        btnBackToLogin.visibility = View.VISIBLE
+//    }
+//
+//    private fun navigateToLogin() {
+//        finish()
+//    }
+//
+//    override fun onBackPressed() {
+//        if (tokenSection.isVisible) {
+//            // Se já está na seção do token, volta para o início
+//            tokenSection.visibility = View.GONE
+//            btnResetPassword.visibility = View.GONE
+//            btnBackToLogin.visibility = View.GONE
+//            emailInput.isEnabled = true
+//            btnRequestReset.isEnabled = true
+//        } else {
+//            super.onBackPressed()
+//        }
+//    }
+//}
