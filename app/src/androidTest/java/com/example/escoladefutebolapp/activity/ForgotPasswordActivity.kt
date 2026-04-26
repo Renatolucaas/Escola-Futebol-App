@@ -1,5 +1,4 @@
 //package com.example.escolafutebolapp.ui.activity
-//
 //import UserRepository
 //import android.graphics.Typeface
 //import android.os.Bundle
@@ -122,3 +121,138 @@ class ForgotPasswordActivity : AppCompatActivity() {
 ////            setTextColor(resources.getColor(android.R.color.black, null))
 ////        }
 ////
+//        // Input do email
+//        emailInput = EditText(this).apply {
+//            layoutParams = LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.MATCH_PARENT,
+//                LinearLayout.LayoutParams.WRAP_CONTENT
+//            )
+//            hint = "seu@email.com"
+//            inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+//            setBackgroundResource(R.drawable.edit_text_background) // Você precisa criar este drawable
+//            setPadding(20, 20, 20, 20)
+//        }
+//
+//        // Botão de solicitar reset
+//        btnRequestReset = Button(this).apply {
+//            layoutParams = LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.MATCH_PARENT,
+//                LinearLayout.LayoutParams.WRAP_CONTENT
+//            ).apply {
+//                setMargins(0, 0, 0, 40)
+//            }
+//            text = "Enviar Código"
+//            setBackgroundColor(resources.getColor(R.color.colorPrimary, null))
+//            setTextColor(resources.getColor(android.R.color.white, null))
+//            textSize = 16f
+//        }
+//
+//        // Seção do token (inicialmente invisível)
+//        tokenSection = LinearLayout(this).apply {
+//            layoutParams = LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.MATCH_PARENT,
+//                LinearLayout.LayoutParams.WRAP_CONTENT
+//            )
+//            orientation = LinearLayout.VERTICAL
+//            visibility = View.GONE
+//        }
+//
+//        // Título da seção do token
+//        val tokenTitle = TextView(this).apply {
+//            layoutParams = LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.MATCH_PARENT,
+//                LinearLayout.LayoutParams.WRAP_CONTENT
+//            ).apply {
+//                setMargins(0, 0, 0, 20)
+//            }
+//            text = "Verificação"
+//            textSize = 18f
+//            setTypeface(null, Typeface.BOLD)
+//            setTextColor(resources.getColor(android.R.color.black, null))
+//        }
+//
+//        // Input do token
+//        tokenInput = EditText(this).apply {
+//            layoutParams = LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.MATCH_PARENT,
+//                LinearLayout.LayoutParams.WRAP_CONTENT
+//            ).apply {
+//                setMargins(0, 0, 0, 20)
+//            }
+//            hint = "Código de 6 dígitos"
+//            inputType = InputType.TYPE_CLASS_NUMBER
+//            maxLines = 1
+//            setBackgroundResource(R.drawable.edit_text_background)
+//            setPadding(20, 20, 20, 20)
+//        }
+//
+//        // Input da nova senha
+//        newPasswordInput = EditText(this).apply {
+//            layoutParams = LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.MATCH_PARENT,
+//                LinearLayout.LayoutParams.WRAP_CONTENT
+//            ).apply {
+//                setMargins(0, 0, 0, 20)
+//            }
+//            hint = "Nova Senha (mínimo 6 caracteres)"
+//            inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
+//            maxLines = 1
+//            setBackgroundResource(R.drawable.edit_text_background)
+//            setPadding(20, 20, 20, 20)
+//        }
+//
+//        // Input de confirmação de senha
+//        confirmPasswordInput = EditText(this).apply {
+//            layoutParams = LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.MATCH_PARENT,
+//                LinearLayout.LayoutParams.WRAP_CONTENT
+//            ).apply {
+//                setMargins(0, 0, 0, 20)
+//            }
+//            hint = "Confirmar Nova Senha"
+//            inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
+//            maxLines = 1
+//            setBackgroundResource(R.drawable.edit_text_background)
+//            setPadding(20, 20, 20, 20)
+//        }
+//
+//        // Botão de redefinir senha
+//        btnResetPassword = Button(this).apply {
+//            layoutParams = LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.MATCH_PARENT,
+//                LinearLayout.LayoutParams.WRAP_CONTENT
+//            )
+//            text = "Redefinir Senha"
+//            setBackgroundColor(resources.getColor(R.color.colorPrimary, null))
+//            setTextColor(resources.getColor(android.R.color.white, null))
+//            textSize = 16f
+//            visibility = View.GONE
+//        }
+//
+//        // Botão voltar para login
+//        btnBackToLogin = Button(this).apply {
+//            layoutParams = LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.MATCH_PARENT,
+//                LinearLayout.LayoutParams.WRAP_CONTENT
+//            ).apply {
+//                setMargins(0, 30, 0, 0)
+//            }
+//            text = "Voltar para Login"
+//            setBackgroundColor(resources.getColor(android.R.color.transparent, null))
+//            setTextColor(resources.getColor(R.color.colorPrimary, null))
+//            textSize = 14f
+//            visibility = View.GONE
+//        }
+//
+//        // ProgressBar
+//        progressBar = ProgressBar(this).apply {
+//            layoutParams = LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.WRAP_CONTENT,
+//                LinearLayout.LayoutParams.WRAP_CONTENT
+//            ).apply {
+//                gravity = Gravity.CENTER
+//                setMargins(0, 30, 0, 0)
+//            }
+//            visibility = View.GONE
+//        }
+//
