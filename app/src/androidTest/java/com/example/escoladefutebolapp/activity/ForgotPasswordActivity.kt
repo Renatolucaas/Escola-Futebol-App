@@ -299,4 +299,70 @@ class ForgotPasswordActivity : AppCompatActivity() {
 //        }
 //    }
 //
-
+//    private fun handleUiState(state: ForgotPasswordUiState) {
+//        when (state) {
+//            is ForgotPasswordUiState.Idle -> {
+//                hideLoading()
+//            }
+//            is ForgotPasswordUiState.Loading -> {
+//                showLoading()
+//            }
+//            is ForgotPasswordUiState.Success -> {
+//                hideLoading()
+//                showSuccess(state.message)
+//                emailInput.isEnabled = false
+//                btnRequestReset.isEnabled = false
+//                showTokenInputSection()
+//            }
+//            is ForgotPasswordUiState.PasswordResetSuccess -> {
+//                hideLoading()
+//                showSuccess(state.message)
+//                btnResetPassword.isEnabled = false
+//                showLoginButton()
+//            }
+//            is ForgotPasswordUiState.Error -> {
+//                hideLoading()
+//                showError(state.message)
+//            }
+//        }
+//    }
+//
+//    private fun setupClickListeners() {
+//        btnRequestReset.setOnClickListener {
+//            val email = emailInput.text.toString().trim()
+//            if (email.isNotEmpty()) {
+//                viewModel.requestPasswordReset(email)
+//            } else {
+//                showError("Por favor, insira seu email")
+//            }
+//        }
+//
+//        btnResetPassword.setOnClickListener {
+//            val email = emailInput.text.toString().trim()
+//            val token = tokenInput.text.toString().trim()
+//            val newPassword = newPasswordInput.text.toString().trim()
+//            val confirmPassword = confirmPasswordInput.text.toString().trim()
+//
+//            if (token.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
+//                showError("Por favor, preencha todos os campos")
+//                return@setOnClickListener
+//            }
+//
+//            if (newPassword != confirmPassword) {
+//                showError("As senhas não coincidem")
+//                return@setOnClickListener
+//            }
+//
+//            if (newPassword.length < 6) {
+//                showError("A senha deve ter pelo menos 6 caracteres")
+//                return@setOnClickListener
+//            }
+//
+//            viewModel.resetPassword(email, token, newPassword)
+//        }
+//
+//        btnBackToLogin.setOnClickListener {
+//            viewModel.navigateToLoginScreen()
+//        }
+//    }
+//
