@@ -250,4 +250,117 @@ object RealtimeDBService {
         }
     }
 
+    /**
+     * Busca todos os usuários (use com cuidado em produção)
+     */
+    suspend fun getAllUsers(): List<User> {
+        return try {
+            val snapshot = usersRef.get().await()
+            snapshot.children.mapNotNull { it.getValue(User::class.java) }
+        } catch (e: Exception) {
+            println("❌ Erro ao buscar todos os usuários: ${e.message}")
+            emptyList()
+        }
+    }
+
+    /**
+     * Busca usuários por tipo (aluno, professor, admin)
+     */
+    suspend fun getUsersByType(tipo: String): List<User> = suspendCoroutine { continuation ->
+        usersRef.orderByChild("tipo_usuario")
+            .equalTo(tipo)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    try {
+                        val users = snapshot.children.mapNotNull {
+                            it.getValue(User::class.java)
+                        }
+                        continuation.resume(users)
+                    } catch (e: Exception) {
+                        println("❌ Erro ao processar usuários: ${e.message}")
+                        continuation.resume(emptyList())
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    println("❌ Erro ao buscar usuários por tipo: ${error.message}")
+                    continuation.resume(emptyList())
+                }
+            })
+    }
+
+    /**
+     * Busca apenas usuários ativos
+     */
+    suspend fun getActiveUsers(): List<User> = suspendCoroutine { continuation ->
+        usersRef.orderByChild("ativo")
+            .equalTo(true)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    try {
+                        val users = snapshot.children.mapNotNull {
+                            it.getValue(User::class.java)
+                        }
+                        continuation.resume(users)
+                    } catch (e: Exception) {
+                        println("❌ Erro ao processar usuários: ${e.message}")
+                        continuation.resume(emptyList())
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    println("❌ Erro ao buscar usuários ativos: ${error.message}")
+                    continuation.resume(emptyList())
+                }
+            })
+    }
+
+    /**
+     * Busca usuário pelo username (versão corrigida)
+     */
+    suspend fun getUserByUsername(username: String): User? {
+        return try {
+            println("🔍 Buscando usuário por username: '$username'")
+
+            val database = Firebase.database.reference
+            val usersRef = database.child("users")
+
+            val dataSnapshot = withContext(Dispatchers.IO) {
+                usersRef.get().await()
+            }
+
+            println("📊 Total de usuários no banco: ${dataSnapshot.children.count()}")
+
+            var userFound: User? = null
+            dataSnapshot.children.forEach { snapshot ->
+                try {
+                    val user = snapshot.getValue(User::class.java)
+                    if (user != null) {
+                        println("👤 Verificando usuário: username='${user.username}' == '$username'")
+                        if (user.username?.equals(username, ignoreCase = true) == true) {
+                            userFound = user
+                            println("✅ Usuário encontrado: ${user.nome} (${user.email})")
+                            return@forEach
+                        }
+                    }
+                } catch (e: Exception) {
+                    println("⚠️ Erro ao processar usuário: ${e.message}")
+                }
+            }
+
+            if (userFound == null) {
+                println("❌ Nenhum usuário encontrado com username: '$username'")
+            }
+
+            userFound
+        } catch (e: Exception) {
+            println("❌ Erro ao buscar usuário por username '$username': ${e.message}")
+            e.printStackTrace()
+            null
+        }
+    }
+
+// No RealtimeDBService, atualize o método createDefaultAdminIfNotExists:
+
+
 
