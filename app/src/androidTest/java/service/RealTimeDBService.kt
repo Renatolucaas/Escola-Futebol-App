@@ -109,3 +109,37 @@ object RealtimeDBService {
             false
         }
     }
+
+
+    /**
+     * ✅ FUNÇÃO NOVA: Atualiza dados do usuário atual
+     */
+    suspend fun updateCurrentUser(updates: Map<String, Any>): Boolean {
+        return try {
+            val firebaseUser = Firebase.auth.currentUser
+            if (firebaseUser != null) {
+                updateUser(firebaseUser.uid, updates)
+                true
+            } else {
+                println("⚠️ Nenhum usuário logado para atualizar")
+                false
+            }
+        } catch (e: Exception) {
+            println("❌ Erro ao atualizar usuário atual: ${e.message}")
+            false
+        }
+    }
+
+    /**
+     * Salva ou atualiza um usuário no Realtime Database
+     */
+    suspend fun saveUser(user: User) {
+        try {
+            usersRef.child(user.uid).setValue(user).await()
+            println("✅ Usuário salvo com sucesso: ${user.nome}")
+        } catch (e: Exception) {
+            println("❌ Erro ao salvar usuário: ${e.message}")
+            throw e
+        }
+    }
+
