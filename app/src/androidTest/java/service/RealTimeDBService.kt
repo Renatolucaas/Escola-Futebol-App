@@ -95,3 +95,17 @@ object RealtimeDBService {
         }
     }
 
+    /**
+     * ✅ FUNÇÃO NOVA: Verifica se o usuário atual tem permissão de admin/tecnico
+     */
+    suspend fun currentUserCanEdit(): Boolean {
+        return try {
+            val currentUser = getCurrentUser()
+            val canEdit = currentUser?.tipo_usuario == "admin" || currentUser?.tipo_usuario == "tecnico"
+            println("🔐 Permissão de edição: ${if (canEdit) "PERMITIDO" else "NEGADO"} para ${currentUser?.nome}")
+            canEdit
+        } catch (e: Exception) {
+            println("❌ Erro ao verificar permissões: ${e.message}")
+            false
+        }
+    }
