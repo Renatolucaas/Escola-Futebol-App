@@ -217,3 +217,37 @@ object RealtimeDBService {
             })
     }
 
+    /**
+     * Verifica se um email está disponível
+     */
+    suspend fun isEmailAvailable(email: String): Boolean {
+        return getUserByEmail(email) == null
+    }
+
+    /**
+     * Atualiza campos específicos de um usuário
+     */
+    suspend fun updateUser(uid: String, updates: Map<String, Any>) {
+        try {
+            usersRef.child(uid).updateChildren(updates).await()
+            println("✅ Usuário atualizado com sucesso")
+        } catch (e: Exception) {
+            println("❌ Erro ao atualizar usuário: ${e.message}")
+            throw e
+        }
+    }
+
+    /**
+     * Deleta um usuário
+     */
+    suspend fun deleteUser(uid: String) {
+        try {
+            usersRef.child(uid).removeValue().await()
+            println("✅ Usuário deletado com sucesso")
+        } catch (e: Exception) {
+            println("❌ Erro ao deletar usuário: ${e.message}")
+            throw e
+        }
+    }
+
+
