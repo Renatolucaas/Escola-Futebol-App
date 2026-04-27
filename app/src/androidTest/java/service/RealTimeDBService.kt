@@ -62,3 +62,36 @@ object RealtimeDBService {
             false
         }
     }
+
+
+    /**
+     * ✅ FUNÇÃO NOVA: Busca o usuário atual com listener em tempo real
+     */
+    fun getCurrentUserRealtime(onUserChanged: (User?) -> Unit) {
+        val firebaseUser = Firebase.auth.currentUser
+        if (firebaseUser != null) {
+            usersRef.child(firebaseUser.uid)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        try {
+                            val user = snapshot.getValue(User::class.java)
+                            if (user != null) {
+                                println("🔄 Usuário atualizado em tempo real: ${user.nome}")
+                            }
+                            onUserChanged(user)
+                        } catch (e: Exception) {
+                            println("❌ Erro ao processar usuário em tempo real: ${e.message}")
+                            onUserChanged(null)
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        println("❌ Listener de usuário cancelado: ${error.message}")
+                        onUserChanged(null)
+                    }
+                })
+        } else {
+            onUserChanged(null)
+        }
+    }
+
