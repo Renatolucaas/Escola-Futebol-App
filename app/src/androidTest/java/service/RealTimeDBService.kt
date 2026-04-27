@@ -188,3 +188,32 @@ object RealtimeDBService {
             })
     }
 
+    /**
+     * Busca um usuário pelo email
+     */
+    suspend fun getUserByEmail(email: String): User? = suspendCoroutine { continuation ->
+        usersRef.orderByChild("email")
+            .equalTo(email)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    try {
+                        if (snapshot.exists()) {
+                            val userSnapshot = snapshot.children.firstOrNull()
+                            val user = userSnapshot?.getValue(User::class.java)
+                            continuation.resume(user)
+                        } else {
+                            continuation.resume(null)
+                        }
+                    } catch (e: Exception) {
+                        println("❌ Erro ao processar dados do usuário: ${e.message}")
+                        continuation.resume(null)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    println("❌ Erro ao buscar usuário por email: ${error.message}")
+                    continuation.resumeWithException(error.toException())
+                }
+            })
+    }
+
