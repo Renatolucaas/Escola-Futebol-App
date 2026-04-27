@@ -47,3 +47,18 @@ object RealtimeDBService {
         }
     }
 
+
+    /**
+     * Método para verificar admin específico por email
+     */
+    suspend fun checkAdminExists(email: String): Boolean {
+        return try {
+            val admin = getUserByEmail(email)
+            val exists = admin != null
+            println("🔍 Verificando admin $email: ${if (exists) "EXISTE" else "NÃO EXISTE"}")
+            exists
+        } catch (e: Exception) {
+            println("❌ Erro ao verificar admin $email: ${e.message}")
+            false
+        }
+    }
