@@ -156,6 +156,7 @@ object RealtimeDBService {
         }
     }
 
+
     /**
      * Busca um usuário pelo nome
      * Percorre todos os usuários para encontrar o nome correspondente
@@ -186,5 +187,4 @@ object RealtimeDBService {
                 }
             })
     }
-
 
