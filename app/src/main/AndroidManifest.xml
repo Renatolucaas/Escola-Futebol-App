@@ -23,3 +23,58 @@
     </application>
 
 </manifest>
+
+
+    suspend fun validateResetToken(email: String, token: String): Boolean {
+    return try {
+    val document = firestore.collection("passwordResets")
+    .document(email.toLowerCase())
+    .get()
+    .await()
+
+    if (document.exists()) {
+    val storedToken = document.getString("resetToken")
+    val expiresAt = document.getDate("tokenExpiresAt")
+
+    val isValid = storedToken == token &&
+    expiresAt != null &&
+    expiresAt.after(Date())
+
+    isValid
+    } else {
+    false
+    }
+    } catch (e: Exception) {
+    throw Exception("Erro ao validar token: ${e.message}")
+    }
+    }
+
+    suspend fun updatePassword(email: String, newPassword: String) {
+    try {
+    // Aqui você implementaria a atualização da senha no Firebase Auth
+    // Por enquanto, vamos apenas atualizar no Firestore
+    val userUpdate = hashMapOf<String, Any>(
+    "password" to newPassword, // Em produção, hash a senha!
+    "updatedAt" to Date()
+    )
+
+    firestore.collection("users")
+    .document(email.toLowerCase())
+    .update(userUpdate)
+    .await()
+    } catch (e: Exception) {
+    throw Exception("Erro ao atualizar senha: ${e.message}")
+    }
+    }
+
+    suspend fun clearResetToken(email: String) {
+    try {
+    firestore.collection("passwordResets")
+    .document(email.toLowerCase())
+    .delete()
+    .await()
+    } catch (e: Exception) {
+    throw Exception("Erro ao limpar token: ${e.message}")
+    }
+    }
+    }
