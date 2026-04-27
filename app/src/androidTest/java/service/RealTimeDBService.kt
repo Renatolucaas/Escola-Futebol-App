@@ -143,3 +143,48 @@ object RealtimeDBService {
         }
     }
 
+    /**
+     * Busca um usuário pelo UID (ID do Firebase)
+     */
+    suspend fun getUser(uid: String): User? {
+        return try {
+            val snapshot = usersRef.child(uid).get().await()
+            snapshot.getValue(User::class.java)
+        } catch (e: Exception) {
+            println("❌ Erro ao buscar usuário: ${e.message}")
+            null
+        }
+    }
+
+    /**
+     * Busca um usuário pelo nome
+     * Percorre todos os usuários para encontrar o nome correspondente
+     */
+    suspend fun getUserByName(nome: String): User? = suspendCoroutine { continuation ->
+        usersRef.orderByChild("nome")
+            .equalTo(nome)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    try {
+                        if (snapshot.exists()) {
+                            // Pega o primeiro usuário encontrado
+                            val userSnapshot = snapshot.children.firstOrNull()
+                            val user = userSnapshot?.getValue(User::class.java)
+                            continuation.resume(user)
+                        } else {
+                            continuation.resume(null)
+                        }
+                    } catch (e: Exception) {
+                        println("❌ Erro ao processar dados do usuário: ${e.message}")
+                        continuation.resume(null)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    println("❌ Erro ao buscar usuário por nome: ${error.message}")
+                    continuation.resumeWithException(error.toException())
+                }
+            })
+    }
+
+
