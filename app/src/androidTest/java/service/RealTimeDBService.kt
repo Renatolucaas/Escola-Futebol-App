@@ -388,4 +388,68 @@ object RealtimeDBService {
                     ativo = true
                 )
 
+                // Salva o admin no banco
+                usersRef.child(adminUser.uid).setValue(adminUser).await()
+                println("✅ Usuário admin padrão criado com sucesso!")
+                println("📧 Email: $adminEmail")
+                println("👤 Username: admin")
+                println("🔓 Senha provisória: false")
+
+                // ✅ TENTA CRIAR NO FIREBASE AUTH (se não existir)
+                createAdminInFirebaseAuth(adminEmail, "Admin123@")
+
+            } else {
+                println("✅ Usuário admin já existe no banco. Nada a fazer.")
+                println("📧 Email: ${existingAdmin.email}")
+                println("👤 Nome: ${existingAdmin.nome}")
+                println("🔑 Tipo: ${existingAdmin.tipo_usuario}")
+            }
+        } catch (e: Exception) {
+            println("❌ Erro ao verificar/criar usuário admin padrão: ${e.message}")
+            e.printStackTrace()
+        }
+    }
+
+    private suspend fun createAdminInFirebaseAuth(email: String, password: String) {
+        try {
+            val auth = Firebase.auth
+
+            // ✅ PRIMEIRO TENTA LOGIN PARA VER SE JÁ EXISTE
+            try {
+                val result = auth.signInWithEmailAndPassword(email, password).await()
+                println("ℹ️ Admin já existe no Firebase Authentication: ${result.user?.uid}")
+                return // Já existe, não precisa criar
+            } catch (signInException: Exception) {
+                // Se falhou no login, tenta criar
+                when {
+                    signInException.message?.contains("invalid credential") == true -> {
+                        println("🔍 Admin não existe no Auth. Criando...")
+                        val createResult = auth.createUserWithEmailAndPassword(email, password).await()
+                        println("✅ Admin criado no Firebase Authentication: ${createResult.user?.uid}")
+                    }
+                    signInException.message?.contains("user not found") == true -> {
+                        println("🔍 Admin não existe no Auth. Criando...")
+                        val createResult = auth.createUserWithEmailAndPassword(email, password).await()
+                        println("✅ Admin criado no Firebase Authentication: ${createResult.user?.uid}")
+                    }
+                    else -> {
+                        println("⚠️ Erro ao verificar admin no Auth: ${signInException.message}")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            when {
+                e.message?.contains("already exists") == true -> {
+                    println("ℹ️ Admin já existe no Firebase Authentication")
+                }
+                e.message?.contains("already in use") == true -> {
+                    println("ℹ️ Email do admin já está em uso no Firebase Authentication")
+                }
+                else -> {
+                    println("❌ Erro ao criar admin no Firebase Auth: ${e.message}")
+                }
+            }
+        }
+    }
+
 
