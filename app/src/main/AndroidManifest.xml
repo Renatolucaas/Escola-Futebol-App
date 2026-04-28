@@ -1,18 +1,80 @@
-//package com.example.escolafutebolapp.ui.activity
-    //
-    //import UserRepository
-    //import android.graphics.Typeface
-    //import android.os.Bundle
-    //import android.text.InputType
-    //import android.view.Gravity
-    //import android.view.View
-    //import android.view.ViewGroup
-    //import android.widget.*
-    //import androidx.appcompat.app.AppCompatActivity
-    //import androidx.core.view.isVisible
-    //import androidx.lifecycle.ViewModelProvider
-    //import com.example.escolafutebolapp.R
-    //import com.example.escolafutebolapp.viewmodel.ForgotPasswordUiState
-    //import com.example.escolafutebolapp.viewmodel.ForgotPasswordViewModel
-    //import com.google.firebase.firestore.FirebaseFirestore
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@drawable/logo_aa"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/edit_text_background"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.EscolaFutebolApp">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.EscolaFutebolApp">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
+
+
+    suspend fun validateResetToken(email: String, token: String): Boolean {
+    return try {
+    val document = firestore.collection("passwordResets")
+    .document(email.toLowerCase())
+    .get()
+    .await()
+
+    if (document.exists()) {
+    val storedToken = document.getString("resetToken")
+    val expiresAt = document.getDate("tokenExpiresAt")
+
+    val isValid = storedToken == token &&
+    expiresAt != null &&
+    expiresAt.after(Date())
+
+    isValid
+    } else {
+    false
+    }
+    } catch (e: Exception) {
+    throw Exception("Erro ao validar token: ${e.message}")
+    }
+    }
+
+    suspend fun updatePassword(email: String, newPassword: String) {
+    try {
+    // Aqui você implementaria a atualização da senha no Firebase Auth
+    // Por enquanto, vamos apenas atualizar no Firestore
+    val userUpdate = hashMapOf<String, Any>(
+    "password" to newPassword, // Em produção, hash a senha!
+    "updatedAt" to Date()
+    )
+
+    firestore.collection("users")
+    .document(email.toLowerCase())
+    .update(userUpdate)
+    .await()
+    } catch (e: Exception) {
+    throw Exception("Erro ao atualizar senha: ${e.message}")
+    }
+    }
+
+    suspend fun clearResetToken(email: String) {
+    try {
+    firestore.collection("passwordResets")
+    .document(email.toLowerCase())
+    .delete()
+    .await()
+    } catch (e: Exception) {
+    throw Exception("Erro ao limpar token: ${e.message}")
+    }
+    }
+    }
