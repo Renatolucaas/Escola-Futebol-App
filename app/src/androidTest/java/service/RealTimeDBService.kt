@@ -363,4 +363,29 @@ object RealtimeDBService {
 // No RealtimeDBService, atualize o método createDefaultAdminIfNotExists:
 
 
+    /**
+     * Cria um usuário admin padrão se não existir
+     */
+    suspend fun createDefaultAdminIfNotExists() {
+        try {
+            val adminEmail = "admin@escolafutebol.com"
+
+            // ✅ PRIMEIRO VERIFICA SE JÁ EXISTE NO BANCO
+            val existingAdmin = getUserByEmail(adminEmail)
+
+            if (existingAdmin == null) {
+                println("🔍 Admin não encontrado no banco. Criando novo admin...")
+
+                // Cria o usuário admin padrão
+                val adminUser = User(
+                    uid = "default_admin_uid", // UID fixo para o admin padrão
+                    nome = "Administrador",
+                    email = adminEmail,
+                    username = "admin",
+                    tipo_usuario = "admin",
+                    data_criacao = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault()).format(java.util.Date()),
+                    senha_provisoria = false,
+                    ativo = true
+                )
+
 
