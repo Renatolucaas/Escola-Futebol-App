@@ -452,4 +452,18 @@ object RealtimeDBService {
         }
     }
 
+    /**
+     * Método adicional para verificar se existe algum admin no sistema
+     */
+    suspend fun hasAnyAdmin(): Boolean {
+        return try {
+            val admins = getUsersByType("admin")
+            println("🔍 Verificando admins no sistema: ${admins.size} encontrados")
+            admins.isNotEmpty()
+        } catch (e: Exception) {
+            println("❌ Erro ao verificar admins: ${e.message}")
+            false
+        }
+    }
 
+}
