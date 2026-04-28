@@ -34,19 +34,19 @@ Período	Entregas	Status
 
 04 Mar - 10 Mar	• Wireframes das telas principais
 • Protótipo navegável (Figma)
-• Validação com usuários	⏳ Em andamento
+• Validação com usuários	✅ Concluído
 
 
 11 Mar - 17 Mar	• Configuração do Firebase
 • Estrutura do Realtime Database
-• Autenticação de usuários	⏳  
+• Autenticação de usuários	✅ Concluído
 
 
 
 
 18 Mar - 24 Mar	• Layouts XML implementados
 • Navegação entre telas
-• Componentes básicos	⏳
+• Componentes básicos	✅ Concluído
 
 
 
@@ -55,25 +55,25 @@ Período	Entregas	Status
 Período	Entregas	Status
 25 Mar - 31 Mar	• Integração Firebase-Frontend
 • CRUD de eventos completo
-• Testes unitários iniciais	⏳
+• Testes unitários iniciais	✅ Concluído
 
 
 
 01 Abr - 07 Abr	• Calendário interativo
 • Filtros por tipo de evento
-• Testes com usuários reais	⏳
+• Testes com usuários reais	✅ Concluído
 
 
 
 08 Abr - 14 Abr	• Ajustes de usabilidade
 • Otimização de performance
-• Melhorias de segurança	⏳
+• Melhorias de segurança	✅ Concluído
 
 
 
 15 Abr - 21 Abr	• Versão Beta para testes
 • Correção de bugs críticos
-• Preparação para lançamento	⏳
+• Preparação para lançamento	✅ Concluído
 
 
 
