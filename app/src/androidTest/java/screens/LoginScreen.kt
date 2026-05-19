@@ -330,6 +330,197 @@ fun LoginScreen(navController: NavController) {
                         grayText = grayText
                     )
 
+// ✅ HEADER RESPONSIVO
+                    LogoSection(
+                        logoSize = logoSize,
+                        white = white,
+                        grayDark = grayDark,
+                        darkSurface = darkSurface,
+                        fontSizeTitle = fontSizeTitle,
+                        grayText = grayText
+                    )
+
+                    // ✅ FORMULÁRIO RESPONSIVO
+                    LoginForm(
+                        email = email,
+                        onEmailChange = { email = it },
+                        password = password,
+                        onPasswordChange = { password = it },
+                        passwordVisible = passwordVisible,
+                        onPasswordVisibleChange = { passwordVisible = it },
+                        authState = authState,
+                        onLoginClick = {
+                            if (email.isNotEmpty() && password.isNotEmpty()) {
+                                authViewModel.loginUser(email, password)
+                            }
+                        },
+                        onForgotPasswordClick = { navController.navigate("forgot_password") },
+                        onRegisterClick = { navController.navigate("register") },
+                        horizontalPadding = 0.dp,
+                        cardPadding = cardPadding,
+                        buttonHeight = buttonHeight,
+                        textFieldHeight = textFieldHeight,
+                        fontSizeTitle = fontSizeTitle,
+                        fontSizeBody = fontSizeBody,
+                        fontSizeSmall = fontSizeSmall,
+                        iconSize = iconSize,
+                        darkSurface = darkSurface,
+                        white = white,
+                        grayText = grayText,
+                        grayDark = grayDark,
+                        accentRed = accentRed,
+                        accentRedLight = accentRedLight,
+                        spacingBetweenSections = spacingBetweenSections
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun LogoSection(
+    logoSize: Dp,
+    white: Color,
+    grayDark: Color,
+    darkSurface: Color,
+    fontSizeTitle: androidx.compose.ui.unit.TextUnit,
+    grayText: Color
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .size(logoSize)
+                .shadow(elevation = 12.dp, shape = RoundedCornerShape(20.dp))
+                .background(
+                    brush = Brush.verticalGradient(colors = listOf(darkSurface, grayDark)),
+                    shape = RoundedCornerShape(20.dp)
+                )
+                .clip(RoundedCornerShape(16.dp)), // Clip interno
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.logo_aa),
+                contentDescription = "Logo Escola de Futebol",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop // Crop pode ser melhor para logos
+            )
+        }
+
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+//            Text(
+//                text = "Bem-vindo de Volta!",
+//                color = white,
+//                fontSize = fontSizeTitle,
+//                fontWeight = FontWeight.Bold,
+//                textAlign = TextAlign.Center
+//            )
+            Text(
+                text = "Entre no seu perfil de atleta",
+                color = grayText,
+                fontSize = fontSizeTitle * 0.75f,
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun LoginForm(
+    email: String,
+    onEmailChange: (String) -> Unit,
+    password: String,
+    onPasswordChange: (String) -> Unit,
+    passwordVisible: Boolean,
+    onPasswordVisibleChange: (Boolean) -> Unit,
+    authState: AuthState,
+    onLoginClick: () -> Unit,
+    onForgotPasswordClick: () -> Unit,
+    onRegisterClick: () -> Unit,
+    horizontalPadding: Dp,
+    cardPadding: Dp,
+    buttonHeight: Dp,
+    textFieldHeight: Dp,
+    fontSizeTitle: androidx.compose.ui.unit.TextUnit,
+    fontSizeBody: androidx.compose.ui.unit.TextUnit,
+    fontSizeSmall: androidx.compose.ui.unit.TextUnit,
+    iconSize: Dp,
+    darkSurface: Color,
+    white: Color,
+    grayText: Color,
+    grayDark: Color,
+    accentRed: Color,
+    accentRedLight: Color,
+    spacingBetweenSections: Dp
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(
+                elevation = 8.dp, // Aumentado
+                shape = RoundedCornerShape(20.dp) // Aumentado
+            ),
+        colors = CardDefaults.cardColors(
+            containerColor = darkSurface
+        ),
+        shape = RoundedCornerShape(20.dp) // Aumentado
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(cardPadding),
+            verticalArrangement = Arrangement.spacedBy(24.dp) // Aumentado
+        ) {
+            // Campo Email
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) { // Aumentado
+                Text(
+                    text = "Usuário ou E-mail",
+                    color = white,
+                    fontSize = fontSizeBody,
+                    fontWeight = FontWeight.Medium
+                )
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = onEmailChange,
+                    placeholder = {
+                        Text(
+                            "digite seu usuário ou e-mail",
+                            color = grayText.copy(alpha = 0.6f),
+                            fontSize = fontSizeBody
+                        )
+                    },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Default.Email,
+                            contentDescription = "Email",
+                            tint = grayText,
+                            modifier = Modifier.size(iconSize)
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(textFieldHeight),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = white,
+                        unfocusedTextColor = white,
+                        focusedBorderColor = accentRed,
+                        unfocusedBorderColor = grayDark,
+                        cursorColor = accentRed,
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        focusedLeadingIconColor = accentRed,
+                        unfocusedLeadingIconColor = grayText
+                    ),
+                    shape = RoundedCornerShape(14.dp), // Aumentado
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    textStyle = androidx.compose.ui.text.TextStyle(fontSize = fontSizeBody)
+                )
+            }
+
 
 
 
