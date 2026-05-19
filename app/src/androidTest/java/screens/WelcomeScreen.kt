@@ -92,3 +92,105 @@ fun WelcomeScreen(navController: NavController, userName: String = "Jogador") {
         }
 
 }
+
+}
+
+    // ✅ DETECTA O TAMANHO DA TELA
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    // ✅ CALCULA VALORES RESPONSIVOS
+    val isSmallScreen = screenWidth < 360.dp
+    val isLargeScreen = screenWidth > 480.dp
+    val isTablet = screenWidth > 600.dp
+    val isLargeTablet = screenWidth > 800.dp
+
+    // ✅ TAMANHOS RESPONSIVOS
+    val horizontalPadding = when {
+        isLargeTablet -> 120.dp
+        isTablet -> 60.dp
+        isLargeScreen -> 32.dp
+        isSmallScreen -> 16.dp
+        else -> 24.dp
+    }
+
+    val verticalPadding = when {
+        isLargeTablet -> 60.dp
+        isTablet -> 40.dp
+        isSmallScreen -> 20.dp
+        else -> 28.dp
+    }
+
+    val spacingBetweenSections = when {
+        isLargeTablet -> 32.dp
+        isTablet -> 28.dp
+        isSmallScreen -> 20.dp
+        else -> 24.dp
+    }
+
+    // ✅ Coroutine scope para logout
+    val scope = rememberCoroutineScope()
+
+    WelcomeContent(
+        userName = decodedUserName,
+        onTreinosClick = { navController.navigate("treino") },
+        // ✅ CORREÇÃO: Passe o userId E userTipo na navegação
+        onAgendaClick = {
+            if (userId.isNotEmpty()) {
+                navController.navigate("agenda/$userId/$userTipo")
+                println("📍 Navegando para: agenda/$userId/$userTipo")
+            } else {
+                println("❌ Erro: userId não encontrado")
+                // Fallback: navega para login se não tiver userId
+                navController.navigate("login") {
+                    popUpTo(0) { inclusive = true }
+                }
+            }
+        },
+        onSairClick = {
+            scope.launch {
+                try {
+                    // ✅ DESLOGA DO FIREBASE AUTH
+                    println("🔓 Fazendo logout do Firebase Auth...")
+                    FirebaseAuth.getInstance().signOut()
+                    println("✅ Logout realizado com sucesso!")
+
+                    // ✅ NAVEGA PARA LOGIN E LIMPA O BACK STACK
+                    navController.navigate("login") {
+                        popUpTo(0) { inclusive = true }
+                    }
+                } catch (e: Exception) {
+                    println("❌ Erro ao fazer logout: ${e.message}")
+                    e.printStackTrace()
+                }
+            }
+        },
+        horizontalPadding = horizontalPadding,
+        verticalPadding = verticalPadding,
+        spacingBetweenSections = spacingBetweenSections,
+        isTablet = isTablet,
+        isSmallScreen = isSmallScreen,
+        isLargeTablet = isLargeTablet
+    )
+}
+
+@Composable
+fun WelcomeContent(
+    userName: String,
+    onTreinosClick: () -> Unit,
+    onAgendaClick: () -> Unit,
+    onSairClick: () -> Unit,
+    horizontalPadding: Dp,
+    verticalPadding: Dp,
+    spacingBetweenSections: Dp,
+    isTablet: Boolean,
+    isSmallScreen: Boolean,
+    isLargeTablet: Boolean
+) {
+    // Cores escuras personalizadas
+    val darkBackground = Color(0xFF0D0D0D)
+    val darkSurface = Color(0xFF1A1A1A)
+    val white = Color(0xFFFFFFFF)
+    val grayText = Color(0xFFB3B3B3)
+    val mediumGray = Color(0xFF404040)
+
