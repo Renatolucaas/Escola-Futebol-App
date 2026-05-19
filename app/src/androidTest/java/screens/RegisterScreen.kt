@@ -417,3 +417,159 @@ private fun registerUser(
     onErrorMessageChange: (String?) -> Unit,
     onSuccessMessageChange: (String?) -> Unit
 ) {
+     // Validações
+    if (nome.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+        onErrorMessageChange("Preencha todos os campos")
+        return
+    }
+
+    if (password != confirmPassword) {
+        onErrorMessageChange("As senhas não coincidem")
+        return
+    }
+
+    if (password.length < 6) {
+        onErrorMessageChange("A senha deve ter pelo menos 6 caracteres")
+        return
+    }
+
+    if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        onErrorMessageChange("Digite um email válido")
+        return
+    }
+
+    onLoadingChange(true)
+    onErrorMessageChange(null)
+    onSuccessMessageChange(null)
+
+    GlobalScope.launch {
+        try {
+            // 1. Criar usuário no Firebase Authentication
+            val authResult = auth.createUserWithEmailAndPassword(email, password).await()
+            val user = authResult.user
+
+            if (user != null) {
+                // 2. Criar objeto User para salvar no Realtime Database
+                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                val currentDate = dateFormat.format(Date())
+
+                val newUser = User(
+                    uid = user.uid,
+                    nome = nome,
+                    email = email,
+                    username = generateUsername(nome),
+                    tipo_usuario = "aluno", // Tipo padrão para novos usuários
+                    data_criacao = currentDate,
+                    senha_provisoria = false,
+                    ativo = true
+                )
+
+                // 3. Salvar usuário no Realtime Database
+                RealtimeDBService.saveUser(newUser)
+
+                // 4. Sucesso - mostra mensagem e navega após delay
+                onLoadingChange(false)
+                onSuccessMessageChange("✅ Conta criada com sucesso! Redirecionando para login...")
+            } else {
+                onLoadingChange(false)
+                onErrorMessageChange("Erro ao criar usuário")
+            }
+        } catch (e: Exception) {
+            onLoadingChange(false)
+            val errorMessage = when {
+                e.message?.contains("email address is already in use") == true ->
+                    "Este email já está em uso"
+                e.message?.contains("network error") == true ->
+                    "Erro de conexão. Verifique sua internet"
+                e.message?.contains("invalid email") == true ->
+                    "Formato de email inválido"
+                e.message?.contains("WEAK_PASSWORD") == true ->
+                    "Senha muito fraca. Use uma senha mais forte"
+                else -> "Erro ao criar conta: ${e.localizedMessage ?: e.message}"
+            }
+            onErrorMessageChange(errorMessage)
+        }
+    }
+}
+
+private fun generateUsername(nome: String): String {
+    // Gera um username baseado no nome (primeiro.nome)
+    val parts = nome.trim().split(" ").filter { it.isNotBlank() }
+    return if (parts.size >= 2) {
+        "${parts.first().lowercase()}.${parts.last().lowercase()}"
+    } else {
+        nome.trim().lowercase().replace(" ", ".")
+    }
+}
+
+@Composable
+private fun RegisterContent(
+    nome: String,
+    email: String,
+    password: String,
+    confirmPassword: String,
+    passwordVisible: Boolean,
+    confirmPasswordVisible: Boolean,
+    isLoading: Boolean,
+    errorMessage: String?,
+    successMessage: String?,
+    onNomeChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onConfirmPasswordChange: (String) -> Unit,
+    onPasswordVisibleChange: () -> Unit,
+    onConfirmPasswordVisibleChange: () -> Unit,
+    onRegisterClick: () -> Unit,
+    onBackToLoginClick: () -> Unit,
+    cardPadding: Dp,
+    buttonHeight: Dp,
+    textFieldHeight: Dp,
+    fontSizeTitle: androidx.compose.ui.unit.TextUnit,
+    fontSizeBody: androidx.compose.ui.unit.TextUnit,
+    fontSizeSmall: androidx.compose.ui.unit.TextUnit,
+    iconSize: Dp,
+    logoSize: Dp,
+    darkSurface: Color,
+    white: Color,
+    grayText: Color,
+    grayDark: Color,
+    accentRed: Color,
+    accentRedLight: Color,
+    successGreen: Color,
+    spacingBetweenFields: Dp,
+    cornerRadius: Dp,
+    shadowElevation: Dp
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(
+                elevation = shadowElevation,
+                shape = RoundedCornerShape(cornerRadius)
+            ),
+        colors = CardDefaults.cardColors(containerColor = darkSurface),
+        shape = RoundedCornerShape(cornerRadius)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(cardPadding),
+            verticalArrangement = Arrangement.spacedBy(spacingBetweenFields)
+        ) {
+            // Campo Nome Completo
+            StandardTextField(
+                label = "Nome Completo",
+                value = nome,
+                onValueChange = onNomeChange,
+                icon = Icons.Default.Person,
+                placeholder = "Seu nome completo",
+                keyboardType = KeyboardType.Text,
+                textFieldHeight = textFieldHeight,
+                fontSizeBody = fontSizeBody,
+                iconSize = iconSize,
+                white = white,
+                grayText = grayText,
+                grayDark = grayDark,
+                accentRed = accentRed,
+                cornerRadius = cornerRadius
+            )
