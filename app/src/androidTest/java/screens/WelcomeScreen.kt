@@ -501,6 +501,220 @@ private fun FeaturesGrid(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(cardSpacing),
                 horizontalAlignment = Alignment.CenterHorizontally
+            ) { // ✅ REMOVIDO: Logo duplicado aqui
+                // O logo já está sendo exibido na LogoSection acima
+
+                FeatureCard(
+                    title = "Treinos",
+                    iconRes = R.drawable.registrar,
+                    onClick = onTreinosClick,
+                    mediumGray = mediumGray,
+                    white = white,
+                    grayText = grayText,
+                    darkSurface = darkSurface,
+                    cardHeight = cardHeight,
+                    cardPadding = cardPadding,
+                    iconBoxSize = iconBoxSize,
+                    iconSize = iconSize,
+                    fontSizeBody = fontSizeBody,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                FeatureCard(
+                    title = "Agenda",
+                    iconRes = R.drawable.agenda,
+                    onClick = onAgendaClick,
+                    mediumGray = mediumGray,
+                    white = white,
+                    grayText = grayText,
+                    darkSurface = darkSurface,
+                    cardHeight = cardHeight,
+                    cardPadding = cardPadding,
+                    iconBoxSize = iconBoxSize,
+                    iconSize = iconSize,
+                    fontSizeBody = fontSizeBody,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        } else {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(cardHeight),
+                horizontalArrangement = Arrangement.spacedBy(cardSpacing),
+                verticalAlignment = Alignment.CenterVertically
             ) {
+                FeatureCard(
+                    title = "Treinos",
+                    iconRes = R.drawable.registrar,
+                    onClick = onTreinosClick,
+                    mediumGray = mediumGray,
+                    white = white,
+                    grayText = grayText,
+                    darkSurface = darkSurface,
+                    cardHeight = cardHeight,
+                    cardPadding = cardPadding,
+                    iconBoxSize = iconBoxSize,
+                    iconSize = iconSize,
+                    fontSizeBody = fontSizeBody,
+                    modifier = Modifier.weight(1f)
+                )
+
+                FeatureCard(
+                    title = "Agenda",
+                    iconRes = R.drawable.agenda,
+                    onClick = onAgendaClick,
+                    mediumGray = mediumGray,
+                    white = white,
+                    grayText = grayText,
+                    darkSurface = darkSurface,
+                    cardHeight = cardHeight,
+                    cardPadding = cardPadding,
+                    iconBoxSize = iconBoxSize,
+                    iconSize = iconSize,
+                    fontSizeBody = fontSizeBody,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun FeatureCard(
+    title: String,
+    iconRes: Int,
+    onClick: () -> Unit,
+    mediumGray: Color,
+    white: Color,
+    grayText: Color,
+    darkSurface: Color,
+    cardHeight: Dp,
+    cardPadding: Dp,
+    iconBoxSize: Dp,
+    iconSize: Dp,
+    fontSizeBody: androidx.compose.ui.unit.TextUnit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .height(cardHeight)
+            .shadow(
+                elevation = if (cardHeight > 180.dp) 16.dp else 12.dp,
+                shape = RoundedCornerShape(if (cardHeight > 180.dp) 24.dp else 20.dp)
+            )
+            .clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF282828)),
+        shape = RoundedCornerShape(if (cardHeight > 180.dp) 24.dp else 20.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(cardPadding),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(iconBoxSize)
+                    .background(
+                        color = Color(0xFF282828),
+                        shape = RoundedCornerShape(if (iconBoxSize > 80.dp) 20.dp else 16.dp)
+                    ),
+                contentAlignment = Alignment.Center // ✅ Já está centralizando
+            ) {
+                Image(
+                    painter = painterResource(iconRes),
+                    contentDescription = "Ícone $title",
+                    modifier = Modifier.fillMaxSize(0.85f), // ✅ Reduz para 85% com padding interno
+                    contentScale = ContentScale.Fit // ✅ Mantém proporção sem cortar
+                )
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            Text(
+                title,
+                color = white,
+                fontSize = fontSizeBody,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
+@Composable
+fun WelcomeScreenMobilePreview() {
+    EscolaFutebolAppTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = Color(0xFF0D0D0D)
+        ) {
+            WelcomeContent(
+                userName = "Carlos Silva",
+                onTreinosClick = {},
+                onAgendaClick = {},
+                onSairClick = {},
+                horizontalPadding = 24.dp,
+                verticalPadding = 28.dp,
+                spacingBetweenSections = 24.dp,
+                isTablet = false,
+                isSmallScreen = false,
+                isLargeTablet = false
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true, device = "spec:width=360dp,height=800dp")
+@Composable
+fun WelcomeScreenSmallPreview() {
+    EscolaFutebolAppTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = Color(0xFF0D0D0D)
+        ) {
+            WelcomeContent(
+                userName = "Maria Santos",
+                onTreinosClick = {},
+                onAgendaClick = {},
+                onSairClick = {},
+                horizontalPadding = 16.dp,
+                verticalPadding = 20.dp,
+                spacingBetweenSections = 20.dp,
+                isTablet = false,
+                isSmallScreen = true,
+                isLargeTablet = false
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true, device = "spec:width=1280dp,height=800dp")
+@Composable
+fun WelcomeScreenTabletPreview() {
+    EscolaFutebolAppTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = Color(0xFF0D0D0D)
+        ) {
+            WelcomeContent(
+                userName = "João Silva",
+                onTreinosClick = {},
+                onAgendaClick = {},
+                onSairClick = {},
+                horizontalPadding = 60.dp,
+                verticalPadding = 40.dp,
+                spacingBetweenSections = 28.dp,
+                isTablet = true,
+                isSmallScreen = false,
+                isLargeTablet = false
+            )
+        }
+    }
+
+
 
 
