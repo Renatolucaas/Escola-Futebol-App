@@ -510,4 +510,180 @@ private fun CardPlanoTreino(
     darkSurface: Color,
     accentRed: Color,
     cardColors: Map<String, Pair<Color, Color>>
-) {
+) {  // 🎯 CORES POR CATEGORIA INTELIGENTE
+    val (primaryColor, secondaryColor) = remember(plano.titulo) {
+        getSmartCardColors(plano)
+    }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(
+                elevation = when {
+                    isLargeTablet -> 8.dp
+                    isTablet -> 6.dp
+                    isSmallScreen -> 4.dp
+                    else -> 5.dp
+                },
+                shape = RoundedCornerShape(
+                    when {
+                        isLargeTablet -> 20.dp
+                        isTablet -> 18.dp
+                        isSmallScreen -> 14.dp
+                        else -> 16.dp
+                    }
+                )
+            )
+            .clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(containerColor = primaryColor),
+        shape = RoundedCornerShape(
+            when {
+                isLargeTablet -> 20.dp
+                isTablet -> 18.dp
+                isSmallScreen -> 14.dp
+                else -> 16.dp
+            }
+        )
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(primaryColor, secondaryColor)
+                    )
+                )
+                .padding(
+                    when {
+                        isLargeTablet -> 24.dp
+                        isTablet -> 20.dp
+                        isSmallScreen -> 16.dp
+                        else -> 18.dp
+                    }
+                )
+        ) {
+            Column {
+                Text(
+                    text = plano.titulo.uppercase(),
+                    color = white,
+                    fontSize = when {
+                        isLargeTablet -> 20.sp
+                        isTablet -> 18.sp
+                        isSmallScreen -> 16.sp
+                        else -> 17.sp
+                    },
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = plano.descricao,
+                    color = white.copy(alpha = 0.9f),
+                    fontSize = when {
+                        isLargeTablet -> 16.sp
+                        isTablet -> 15.sp
+                        isSmallScreen -> 13.sp
+                        else -> 14.sp
+                    },
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(white.copy(alpha = 0.2f))
+                            .padding(
+                                horizontal = when {
+                                    isLargeTablet -> 12.dp
+                                    isTablet -> 10.dp
+                                    isSmallScreen -> 8.dp
+                                    else -> 9.dp
+                                },
+                                vertical = when {
+                                    isLargeTablet -> 6.dp
+                                    isTablet -> 5.dp
+                                    isSmallScreen -> 4.dp
+                                    else -> 4.5.dp
+                                }
+                            )
+                    ) {
+                        Text(
+                            text = "⏱️ ${plano.tempo}",
+                            color = white,
+                            fontSize = when {
+                                isLargeTablet -> 14.sp
+                                isTablet -> 13.sp
+                                isSmallScreen -> 11.sp
+                                else -> 12.sp
+                            },
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+// 🎯 FUNÇÃO INTELIGENTE PARA CORES
+private fun getSmartCardColors(plano: PlanoTreino): Pair<Color, Color> {
+    val titulo = plano.titulo.lowercase()
+
+    return when {
+        // TREINOS DE FORÇA E POTÊNCIA
+        titulo.contains("força") || titulo.contains("muscul") || titulo.contains("potência") ||
+                titulo.contains("peso") || titulo.contains("halter") ->
+            Pair(Color(0xFFFF5722), Color(0xFFFF8A65)) // Laranja forte
+
+        // TREINOS CARDIOVASCULARES
+        titulo.contains("cardio") || titulo.contains("aerób") || titulo.contains("corrida") ||
+                titulo.contains("esteira") || titulo.contains("bike") ->
+            Pair(Color(0xFF2196F3), Color(0xFF64B5F6)) // Azul cardio
+
+        // TREINOS TÉCNICOS
+        titulo.contains("técnic") || titulo.contains("habilid") || titulo.contains("coordena") ||
+                titulo.contains("domínio") || titulo.contains("passe") ->
+            Pair(Color(0xFF9C27B0), Color(0xFFBA68C8)) // Roxo técnico
+
+        // TREINOS DE VELOCIDADE
+        titulo.contains("velocidade") || titulo.contains("rápid") || titulo.contains("sprint") ||
+                titulo.contains("aceleração") ->
+            Pair(Color(0xFFE65C5C), Color(0xFFFF5252)) // Vermelho velocidade
+
+        // TREINOS FLEXIBILIDADE
+        titulo.contains("along") || titulo.contains("flexib") || titulo.contains("mobilid") ||
+                titulo.contains("yoga") || titulo.contains("stretch") ->
+            Pair(Color(0xFF009688), Color(0xFF4DB6AC)) // Verde alongamento
+
+        // TREINOS EQUIPE/JOGO
+        titulo.contains("jogo") || titulo.contains("equipe") || titulo.contains("coletivo") ||
+                titulo.contains("partida") ->
+            Pair(Color(0xFFFF9800), Color(0xFFFFB74D)) // Laranja time
+
+        // TREINOS RECUPERAÇÃO
+        titulo.contains("recuper") || titulo.contains("regener") || titulo.contains("descans") ||
+                titulo.contains("leve") ->
+            Pair(Color(0xFF607D8B), Color(0xFF90A4AE)) // Cinza recuperação
+
+        // PADRÃO - CORES VARIADAS
+        else -> {
+            val colors = listOf(
+                Pair(Color(0xFFE65C5C), Color(0xFFFF5252)),
+                Pair(Color(0xFF2196F3), Color(0xFF64B5F6)),
+                Pair(Color(0xFF9C27B0), Color(0xFFBA68C8)),
+                Pair(Color(0xFF009688), Color(0xFF4DB6AC)),
+                Pair(Color(0xFFFF9800), Color(0xFFFFB74D))
+            )
+            colors[plano.titulo.hashCode().absoluteValue % colors.size]
+        }
+    }
+
