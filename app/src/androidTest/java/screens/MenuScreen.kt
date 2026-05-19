@@ -119,3 +119,81 @@ fun MenuScreen(
                 description = "Acompanhar treinos",
                 onClick = { navController.navigate("treino") }
             )
+
+// ✅ Mostra opções administrativas apenas para admin/tecnico
+            if (currentUser?.tipo_usuario == "admin" || currentUser?.tipo_usuario == "tecnico") {
+                MenuOption(
+                    icon = Icons.Default.Settings,
+                    title = "Administração",
+                    description = "Gerenciar sistema",
+                    onClick = { /* navController.navigate("admin") */ }
+                )
+            }
+
+            MenuOption(
+                icon = Icons.Default.ExitToApp,
+                title = "Sair",
+                description = "Fazer logout",
+                onClick = {
+                    // Implementar logout
+                    FirebaseAuth.getInstance().signOut()
+                    navController.navigate("login") {
+                        popUpTo("menu") { inclusive = true }
+                    }
+                }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MenuOption(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    title: String,
+    description: String,
+    onClick: () -> Unit
+) {
+    Card(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = Color(0xFF262626)
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = title,
+                tint = Color(0xFFE84545),
+                modifier = Modifier.size(32.dp)
+            )
+            Column(
+                modifier = Modifier.weight(weight = 1f)
+            ) {
+                Text(
+                    text = title,
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = description,
+                    color = Color(0xFFB3B3B3),
+                    fontSize = 14.sp
+                )
+            }
+            Icon(
+                imageVector = Icons.Default.ChevronRight,
+                contentDescription = "Ir",
+                tint = Color(0xFFB3B3B3)
+            )
+        }
+    }
+}
