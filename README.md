@@ -83,13 +83,13 @@ Período	Entregas	Status
 22 Abr - 28 Abr	• Módulo de Presença
 - Marcação de comparecimento
 - Lista de participantes por evento
-- Histórico de presenças	⏳
+- Histórico de presenças	✅
 
 
 29 Abr - 05 Mai	• Sistema de Notificações
 - Lembretes automáticos
 - Notificações push
-- Alertas de alterações	⏳
+- Alertas de alterações	✅
 
   
 
@@ -97,20 +97,20 @@ Período	Entregas	Status
 06 Mai - 12 Mai	• Relatórios e Estatísticas
 - Dashboard com gráficos
 - Frequência por categoria
-- Exportação de dados	⏳
+- Exportação de dados	✅
   
 
 
 13 Mai - 19 Mai	• Compartilhamento Social
 - Integração com WhatsApp
 - Compartilhar eventos
-- Convites para pais	⏳
+- Convites para pais	✅
 
 
 20 Mai - 26 Mai	• Versão 1.0 Final
 - Testes de aceitação
 - Publicação na Play Store
-- Documentação completa	⏳
+- Documentação completa	✅
 
 
 🛠️ Tecnologias Utilizadas
