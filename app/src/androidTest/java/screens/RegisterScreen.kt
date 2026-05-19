@@ -341,3 +341,79 @@ fun RegisterScreen(navController: NavController) {
                         }
                     }
                 } else {
+
+// ✅ SMARTPHONES - COLUNA COMPLETA
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(scrollState)
+                            .padding(horizontal = horizontalPadding, vertical = verticalPadding),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(spacingBetweenSections)
+                    ) {
+                        RegisterContent(
+                            nome = nome,
+                            email = email,
+                            password = password,
+                            confirmPassword = confirmPassword,
+                            passwordVisible = passwordVisible,
+                            confirmPasswordVisible = confirmPasswordVisible,
+                            isLoading = isLoading,
+                            errorMessage = errorMessage,
+                            successMessage = successMessage,
+                            onNomeChange = { nome = it },
+                            onEmailChange = { email = it },
+                            onPasswordChange = { password = it },
+                            onConfirmPasswordChange = { confirmPassword = it },
+                            onPasswordVisibleChange = { passwordVisible = !passwordVisible },
+                            onConfirmPasswordVisibleChange = { confirmPasswordVisible = !confirmPasswordVisible },
+                            onRegisterClick = {
+                                registerUser(
+                                    nome = nome,
+                                    email = email,
+                                    password = password,
+                                    confirmPassword = confirmPassword,
+                                    auth = auth,
+                                    onLoadingChange = { isLoading = it },
+                                    onErrorMessageChange = { errorMessage = it },
+                                    onSuccessMessageChange = { successMessage = it }
+                                )
+                            },
+                            onBackToLoginClick = { navController.popBackStack() },
+                            cardPadding = cardPadding,
+                            buttonHeight = buttonHeight,
+                            textFieldHeight = textFieldHeight,
+                            fontSizeTitle = fontSizeTitle,
+                            fontSizeBody = fontSizeBody,
+                            fontSizeSmall = fontSizeSmall,
+                            iconSize = iconSize,
+                            logoSize = logoSize,
+                            darkSurface = darkSurface,
+                            white = white,
+                            grayText = grayText,
+                            grayDark = grayDark,
+                            accentRed = accentRed,
+                            accentRedLight = accentRedLight,
+                            successGreen = successGreen,
+                            spacingBetweenFields = spacingBetweenFields,
+                            cornerRadius = cornerRadius,
+                            shadowElevation = shadowElevation
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@OptIn(DelicateCoroutinesApi::class)
+private fun registerUser(
+    nome: String,
+    email: String,
+    password: String,
+    confirmPassword: String,
+    auth: FirebaseAuth,
+    onLoadingChange: (Boolean) -> Unit,
+    onErrorMessageChange: (String?) -> Unit,
+    onSuccessMessageChange: (String?) -> Unit
+) {
