@@ -249,3 +249,86 @@ fun LoginScreen(navController: NavController) {
                             )
 
 
+// Informações adicionais para tablet
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                Text(
+                                    text = "Escola de Futebol Premium",
+                                    color = white,
+                                    fontSize = fontSizeTitle,
+                                    fontWeight = FontWeight.Bold,
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    text = "Treinos profissionais • Tecnologia avançada • Resultados comprovados",
+                                    color = grayText,
+                                    fontSize = fontSizeBody,
+                                    textAlign = TextAlign.Center,
+                                    lineHeight = fontSizeBody * 1.4f
+                                )
+                            }
+                        }
+                    }
+
+                    // Lado direito - Formulário
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                    ) {
+                        LoginForm(
+                            email = email,
+                            onEmailChange = { email = it },
+                            password = password,
+                            onPasswordChange = { password = it },
+                            passwordVisible = passwordVisible,
+                            onPasswordVisibleChange = { passwordVisible = it },
+                            authState = authState,
+                            onLoginClick = {
+                                if (email.isNotEmpty() && password.isNotEmpty()) {
+                                    authViewModel.loginUser(email, password)
+                                }
+                            },
+                            onForgotPasswordClick = { navController.navigate("forgot_password") },
+                            onRegisterClick = { navController.navigate("register") },
+                            horizontalPadding = 0.dp,
+                            cardPadding = cardPadding,
+                            buttonHeight = buttonHeight,
+                            textFieldHeight = textFieldHeight,
+                            fontSizeTitle = fontSizeTitle,
+                            fontSizeBody = fontSizeBody,
+                            fontSizeSmall = fontSizeSmall,
+                            iconSize = iconSize,
+                            darkSurface = darkSurface,
+                            white = white,
+                            grayText = grayText,
+                            grayDark = grayDark,
+                            accentRed = accentRed,
+                            accentRedLight = accentRedLight,
+                            spacingBetweenSections = spacingBetweenSections
+                        )
+                    }
+                }
+            } else {
+                // ✅ LAYOUT MOBILE - Coluna única
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = horizontalPadding, vertical = verticalPadding),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(spacingBetweenSections)
+                ) {
+                    // ✅ HEADER RESPONSIVO
+                    LogoSection(
+                        logoSize = logoSize,
+                        white = white,
+                        grayDark = grayDark,
+                        darkSurface = darkSurface,
+                        fontSizeTitle = fontSizeTitle,
+                        grayText = grayText
+                    )
+
+
+
