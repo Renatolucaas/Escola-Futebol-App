@@ -521,6 +521,222 @@ private fun LoginForm(
                 )
             }
 
+            // Campo Senha
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) { // Aumentado
+                Text(
+                    text = "Senha",
+                    color = white,
+                    fontSize = fontSizeBody,
+                    fontWeight = FontWeight.Medium
+                )
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = onPasswordChange,
+                    placeholder = {
+                        Text(
+                            "Digite sua senha",
+                            color = grayText.copy(alpha = 0.6f),
+                            fontSize = fontSizeBody
+                        )
+                    },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Default.Lock,
+                            contentDescription = "Senha",
+                            tint = grayText,
+                            modifier = Modifier.size(iconSize)
+                        )
+                    },
+                    trailingIcon = {
+                        IconButton(
+                            onClick = { onPasswordVisibleChange(!passwordVisible) },
+                            modifier = Modifier.size(iconSize + 6.dp) // Aumentado
+                        ) {
+                            Icon(
+                                imageVector = if (passwordVisible) Icons.Default.Visibility
+                                else Icons.Default.VisibilityOff,
+                                contentDescription = if (passwordVisible) "Ocultar senha" else "Mostrar senha",
+                                tint = grayText,
+                                modifier = Modifier.size(iconSize)
+                            )
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(textFieldHeight),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = white,
+                        unfocusedTextColor = white,
+                        focusedBorderColor = accentRed,
+                        unfocusedBorderColor = grayDark,
+                        cursorColor = accentRed,
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        focusedLeadingIconColor = accentRed,
+                        unfocusedLeadingIconColor = grayText,
+                        focusedTrailingIconColor = accentRed,
+                        unfocusedTrailingIconColor = grayText
+                    ),
+                    shape = RoundedCornerShape(14.dp), // Aumentado
+                    singleLine = true,
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    textStyle = androidx.compose.ui.text.TextStyle(fontSize = fontSizeBody)
+                )
+            }
+
+            // Mensagem de Erro
+            AnimatedVisibility(
+                visible = authState is AuthState.Error,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = accentRed.copy(alpha = 0.1f),
+                            shape = RoundedCornerShape(12.dp) // Aumentado
+                        )
+                        .padding(16.dp), // Aumentado
+                    verticalArrangement = Arrangement.spacedBy(8.dp) // Aumentado
+                ) {
+                    Text(
+                        text = (authState as? AuthState.Error)?.message ?: "Erro desconhecido",
+                        color = accentRedLight,
+                        fontSize = fontSizeBody * 0.9f,
+                        fontWeight = FontWeight.Medium
+                    )
+
+                    if ((authState as? AuthState.Error)?.message?.contains("password") == true ||
+                        (authState as? AuthState.Error)?.message?.contains("credential") == true) {
+                        TextButton(
+                            onClick = onForgotPasswordClick,
+                            modifier = Modifier.padding(0.dp)
+                        ) {
+                            Text(
+                                text = "Esqueceu sua senha? Clique aqui para redefinir",
+                                color = accentRedLight,
+                                fontSize = fontSizeBody * 0.85f,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                    }
+                }
+            }
+
+            // Botão Entrar
+            Button(
+                onClick = onLoginClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(buttonHeight)
+                    .shadow(
+                        elevation = 6.dp, // Aumentado
+                        shape = RoundedCornerShape(14.dp) // Aumentado
+                    ),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = accentRed,
+                    contentColor = white
+                ),
+                shape = RoundedCornerShape(14.dp), // Aumentado
+                enabled = authState !is AuthState.Loading
+            ) {
+                if (authState is AuthState.Loading) {
+                    CircularProgressIndicator(
+                        color = white,
+                        strokeWidth = 2.5.dp, // Aumentado
+                        modifier = Modifier.size(buttonHeight * 0.4f)
+                    )
+                } else {
+                    Text(
+                        text = "Acessar Conta",
+                        fontSize = fontSizeBody,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
+            // Link Esqueci Senha
+            TextButton(
+                onClick = onForgotPasswordClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(buttonHeight * 0.85f) // Ajustado
+            ) {
+                Text(
+                    text = "Esqueceu sua senha?",
+                    color = accentRedLight,
+                    fontSize = fontSizeBody,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+        }
+    }
+
+    Spacer(modifier = Modifier.height(8.dp)) // Espaço entre cards
+
+    // Seção de Cadastro
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(
+                elevation = 6.dp, // Aumentado
+                shape = RoundedCornerShape(16.dp) // Aumentado
+            ),
+        colors = CardDefaults.cardColors(
+            containerColor = darkSurface.copy(alpha = 0.8f)
+        ),
+        shape = RoundedCornerShape(16.dp), // Aumentado
+        border = BorderStroke(
+            1.5.dp, // Aumentado
+            accentRed.copy(alpha = 0.3f)
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(cardPadding * 0.9f), // Ajustado
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp) // Aumentado
+        ) {
+            Text(
+                text = "Ainda não tem uma conta?",
+                color = white,
+                fontSize = fontSizeBody,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center
+            )
+
+            Button(
+                onClick = onRegisterClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(buttonHeight * 0.95f), // Ajustado
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent,
+                    contentColor = accentRedLight
+                ),
+                shape = RoundedCornerShape(12.dp), // Aumentado
+                border = BorderStroke(2.dp, accentRed) // Aumentado
+            ) {
+                Text(
+                    text = "Entrar para o Time",
+                    fontSize = fontSizeBody,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Text(
+                text = "Dúvidas? (27) 99999-9999",
+                color = grayText,
+                fontSize = fontSizeSmall,
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+
+
 
 
 
