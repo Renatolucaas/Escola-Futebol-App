@@ -82,3 +82,83 @@ fun LoginScreen(navController: NavController) {
     val isLargeScreen = screenWidth > 480.dp
     val isTablet = screenWidth > 600.dp
     val isLargeTablet = screenWidth > 800.dp
+
+    // ✅ TAMANHOS RESPONSIVOS AUMENTADOS
+    val horizontalPadding = when {
+        isLargeTablet -> 120.dp
+        isTablet -> 60.dp
+        isLargeScreen -> 32.dp
+        isSmallScreen -> 16.dp
+        else -> 24.dp
+    }
+
+    val verticalPadding = when {
+        isLargeTablet -> 60.dp
+        isTablet -> 40.dp
+        isSmallScreen -> 20.dp
+        else -> 28.dp
+    }
+
+    val cardPadding = when {
+        isLargeTablet -> 40.dp
+        isTablet -> 28.dp
+        isSmallScreen -> 20.dp
+        else -> 24.dp
+    }
+
+    val logoSize = when {
+        isLargeTablet -> 140.dp
+        isTablet -> 110.dp
+        isLargeScreen -> 90.dp
+        isSmallScreen -> 70.dp
+        else -> 80.dp
+    }
+
+    val iconSize = when {
+        isLargeTablet -> 24.dp
+        isTablet -> 22.dp
+        isSmallScreen -> 18.dp
+        else -> 20.dp
+    }
+
+    val fontSizeTitle = when {
+        isLargeTablet -> 28.sp
+        isTablet -> 24.sp
+        isSmallScreen -> 18.sp
+        else -> 20.sp
+    }
+
+    val fontSizeBody = when {
+        isLargeTablet -> 18.sp
+        isTablet -> 16.sp
+        isSmallScreen -> 14.sp
+        else -> 15.sp
+    }
+
+    val fontSizeSmall = when {
+        isLargeTablet -> 14.sp
+        isTablet -> 12.sp
+        isSmallScreen -> 11.sp
+        else -> 12.sp
+    }
+
+    val buttonHeight = when {
+        isLargeTablet -> 60.dp
+        isTablet -> 54.dp
+        isSmallScreen -> 46.dp
+        else -> 52.dp
+    }
+
+    val textFieldHeight = when {
+        isLargeTablet -> 60.dp
+        isTablet -> 54.dp
+        isSmallScreen -> 46.dp
+        else -> 52.dp
+    }
+
+    val spacingBetweenSections = when {
+        isLargeTablet -> 32.dp
+        isTablet -> 28.dp
+        isSmallScreen -> 20.dp
+        else -> 24.dp
+
