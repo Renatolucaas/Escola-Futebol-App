@@ -166,3 +166,178 @@ fun RegisterScreen(navController: NavController) {
         else -> 18.dp
 
 }
+
+}
+
+    // ✅ ESPAÇAMENTO ENTRE SEÇÕES - AUMENTADO
+    val spacingBetweenSections = when {
+        isXLargeTablet -> 36.dp
+        isLargeTablet -> 32.dp
+        isSmallTablet -> 28.dp
+        isLargePhone -> 24.dp
+        isNormalPhone -> 20.dp
+        else -> 16.dp
+    }
+
+    // ✅ RAIO DOS CANTOS - AUMENTADO
+    val cornerRadius = when {
+        isXLargeTablet -> 28.dp
+        isLargeTablet -> 26.dp
+        isSmallTablet -> 24.dp
+        isLargePhone -> 20.dp
+        isNormalPhone -> 18.dp
+        else -> 16.dp
+    }
+
+    // ✅ ELEVAÇÃO DAS SOMBRAS - AUMENTADA
+    val shadowElevation = when {
+        isXLargeTablet -> 12.dp
+        isLargeTablet -> 11.dp
+        isSmallTablet -> 10.dp
+        else -> 8.dp
+    }
+
+    var nome by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    var successMessage by remember { mutableStateOf<String?>(null) }
+    var passwordVisible by remember { mutableStateOf(false) }
+    var confirmPasswordVisible by remember { mutableStateOf(false) }
+
+    // Firebase Auth
+    val auth: FirebaseAuth = Firebase.auth
+
+    // Cores
+    val darkBackground = Color(0xFF0D0D0D)
+    val darkSurface = Color(0xFF1A1A1A)
+    val accentRed = Color(0xFFE65C5C)
+    val accentRedLight = Color(0xFFFF7B7B)
+    val successGreen = Color(0xFF4CAF50)
+    val white = Color(0xFFFFFFFF)
+    val grayText = Color(0xFFB3B3B3)
+    val grayDark = Color(0xFF404040)
+
+    // Efeito para navegar após sucesso
+    LaunchedEffect(successMessage) {
+        if (successMessage != null) {
+            // Aguarda 2 segundos e depois volta para o login
+            kotlinx.coroutines.delay(2000)
+            navController.popBackStack()
+        }
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        "Criar Conta",
+                        color = white,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = fontSizeBody
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = "Voltar",
+                            tint = white,
+                            modifier = Modifier.size(iconSize)
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent,
+                    titleContentColor = white
+                )
+            )
+        },
+        containerColor = Color.Transparent
+    ) { innerPadding ->
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = darkBackground
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(Color(0xFF1A1A1A), darkBackground)
+                        )
+                    )
+                    .padding(innerPadding)
+            ) {
+                val scrollState = rememberScrollState()
+
+                // ✅ LAYOUT ADAPTATIVO
+                if (screenWidth >= 600.dp) {
+                    // ✅ TABLETS - CENTRALIZADO
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = horizontalPadding, vertical = verticalPadding),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .verticalScroll(scrollState),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(spacingBetweenSections)
+                        ) {
+                            RegisterContent(
+                                nome = nome,
+                                email = email,
+                                password = password,
+                                confirmPassword = confirmPassword,
+                                passwordVisible = passwordVisible,
+                                confirmPasswordVisible = confirmPasswordVisible,
+                                isLoading = isLoading,
+                                errorMessage = errorMessage,
+                                successMessage = successMessage,
+                                onNomeChange = { nome = it },
+                                onEmailChange = { email = it },
+                                onPasswordChange = { password = it },
+                                onConfirmPasswordChange = { confirmPassword = it },
+                                onPasswordVisibleChange = { passwordVisible = !passwordVisible },
+                                onConfirmPasswordVisibleChange = { confirmPasswordVisible = !confirmPasswordVisible },
+                                onRegisterClick = {
+                                    registerUser(
+                                        nome = nome,
+                                        email = email,
+                                        password = password,
+                                        confirmPassword = confirmPassword,
+                                        auth = auth,
+                                        onLoadingChange = { isLoading = it },
+                                        onErrorMessageChange = { errorMessage = it },
+                                        onSuccessMessageChange = { successMessage = it }
+                                    )
+                                },
+                                onBackToLoginClick = { navController.popBackStack() },
+                                cardPadding = cardPadding,
+                                buttonHeight = buttonHeight,
+                                textFieldHeight = textFieldHeight,
+                                fontSizeTitle = fontSizeTitle,
+                                fontSizeBody = fontSizeBody,
+                                fontSizeSmall = fontSizeSmall,
+                                iconSize = iconSize,
+                                logoSize = logoSize,
+                                darkSurface = darkSurface,
+                                white = white,
+                                grayText = grayText,
+                                grayDark = grayDark,
+                                accentRed = accentRed,
+                                accentRedLight = accentRedLight,
+                                successGreen = successGreen,
+                                spacingBetweenFields = spacingBetweenFields,
+                                cornerRadius = cornerRadius,
+                                shadowElevation = shadowElevation
+                            )
+                        }
+                    }
+                } else {
