@@ -102,3 +102,412 @@ fun TreinosScreen(
     }
 
 }
+
+// ✅ CORES DO TEMA (PRETO E VERMELHO)
+    val darkBackground = Color(0xFF0D0D0D)
+    val darkSurface = Color(0xFF1A1A1A)
+    val accentRed = Color(0xFFE65C5C)
+    val accentRedLight = Color(0xFFFF7B7B)
+    val white = Color(0xFFFFFFFF)
+    val grayText = Color(0xFFB3B3B3)
+    val grayDark = Color(0xFF404040)
+
+    // 🎨 NOVAS CORES PARA OS CARDS
+    val cardColors = mapOf(
+        "intensivo" to Pair(Color(0xFFE65C5C), Color(0xFFFF5252)), // Vermelho intenso
+        "força" to Pair(Color(0xFFFF9800), Color(0xFFFFB74D)),    // Laranja força
+        "cardio" to Pair(Color(0xFF2196F3), Color(0xFF64B5F6)),   // Azul cardio
+        "técnica" to Pair(Color(0xFF9C27B0), Color(0xFFBA68C8)),  // Roxo técnica
+        "alongamento" to Pair(Color(0xFF009688), Color(0xFF4DB6AC)), // Verde alongamento
+        "recuperação" to Pair(Color(0xFF607D8B), Color(0xFF90A4AE)), // Cinza recuperação
+        "padrão" to Pair(Color(0xFF1A1A1A), Color(0xFF252525))    // Padrão escuro
+    )
+
+    val state by viewModel.state.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    // Carrega os dados quando a tela é aberta
+    LaunchedEffect(Unit) {
+        viewModel.carregarPlanosTreino()
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        "Meus Treinos",
+                        color = white,
+                        fontSize = when {
+                            isLargeTablet -> 22.sp
+                            isTablet -> 20.sp
+                            isSmallScreen -> 18.sp
+                            else -> 19.sp
+                        }
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = "Voltar",
+                            tint = white,
+                            modifier = Modifier.size(
+                                when {
+                                    isLargeTablet -> 28.dp
+                                    isTablet -> 26.dp
+                                    isSmallScreen -> 22.dp
+                                    else -> 24.dp
+                                }
+                            )
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = darkSurface,
+                    titleContentColor = white,
+                    actionIconContentColor = white
+                ),
+                actions = {
+                    IconButton(
+                        onClick = { viewModel.carregarPlanosTreino() },
+                        enabled = !state.carregando
+                    ) {
+                        Icon(
+                            Icons.Default.Refresh,
+                            contentDescription = "Recarregar",
+                            tint = if (state.carregando) grayText else accentRed,
+                            modifier = Modifier.size(
+                                when {
+                                    isLargeTablet -> 26.dp
+                                    isTablet -> 24.dp
+                                    isSmallScreen -> 20.dp
+                                    else -> 22.dp
+                                }
+                            )
+                        )
+                    }
+                }
+            )
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        containerColor = darkBackground
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFF1A1A1A),
+                            darkBackground
+                        )
+                    )
+                )
+                .padding(paddingValues)
+        ) {
+            when {
+                state.carregando -> {
+                    LoadingSection(
+                        isTablet = isTablet,
+                        isSmallScreen = isSmallScreen,
+                        isLargeTablet = isLargeTablet,
+                        white = white,
+                        grayText = grayText
+                    )
+                }
+
+                state.erro != null -> {
+                    ErrorSection(
+                        error = state.erro!!,
+                        onRetry = { viewModel.carregarPlanosTreino() },
+                        isTablet = isTablet,
+                        isSmallScreen = isSmallScreen,
+                        isLargeTablet = isLargeTablet,
+                        white = white,
+                        grayText = grayText,
+                        accentRed = accentRed
+                    )
+                }
+
+                state.planosTreino.isEmpty() -> {
+                    EmptySection(
+                        isTablet = isTablet,
+                        isSmallScreen = isSmallScreen,
+                        isLargeTablet = isLargeTablet,
+                        white = white,
+                        grayText = grayText
+                    )
+                }
+
+                else -> {
+                    TreinosListSection(
+                        planosTreino = state.planosTreino,
+                        snackbarHostState = snackbarHostState,
+                        scope = scope,
+                        horizontalPadding = horizontalPadding,
+                        verticalPadding = verticalPadding,
+                        cardSpacing = cardSpacing,
+                        isTablet = isTablet,
+                        isSmallScreen = isSmallScreen,
+                        isLargeTablet = isLargeTablet,
+                        white = white,
+                        grayText = grayText,
+                        darkSurface = darkSurface,
+                        accentRed = accentRed,
+                        cardColors = cardColors
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun LoadingSection(
+    isTablet: Boolean,
+    isSmallScreen: Boolean,
+    isLargeTablet: Boolean,
+    white: Color,
+    grayText: Color
+) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        CircularProgressIndicator(
+            color = Color(0xFFE65C5C),
+            strokeWidth = when {
+                isLargeTablet -> 4.dp
+                isTablet -> 3.5.dp
+                isSmallScreen -> 2.5.dp
+                else -> 3.dp
+            },
+            modifier = Modifier.size(
+                when {
+                    isLargeTablet -> 48.dp
+                    isTablet -> 44.dp
+                    isSmallScreen -> 36.dp
+                    else -> 40.dp
+                }
+            )
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "Carregando planos de treino...",
+            color = grayText,
+            fontSize = when {
+                isLargeTablet -> 18.sp
+                isTablet -> 16.sp
+                isSmallScreen -> 14.sp
+                else -> 15.sp
+            }
+        )
+    }
+}
+
+@Composable
+private fun ErrorSection(
+    error: String,
+    onRetry: () -> Unit,
+    isTablet: Boolean,
+    isSmallScreen: Boolean,
+    isLargeTablet: Boolean,
+    white: Color,
+    grayText: Color,
+    accentRed: Color
+) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "❌ Erro ao carregar",
+            color = accentRed,
+            fontSize = when {
+                isLargeTablet -> 22.sp
+                isTablet -> 20.sp
+                isSmallScreen -> 18.sp
+                else -> 19.sp
+            },
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = error,
+            color = grayText,
+            fontSize = when {
+                isLargeTablet -> 16.sp
+                isTablet -> 15.sp
+                isSmallScreen -> 13.sp
+                else -> 14.sp
+            },
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            modifier = Modifier.padding(horizontal = 32.dp)
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        Button(
+            onClick = onRetry,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = accentRed,
+                contentColor = white
+            ),
+            modifier = Modifier
+                .height(
+                    when {
+                        isLargeTablet -> 52.dp
+                        isTablet -> 48.dp
+                        isSmallScreen -> 42.dp
+                        else -> 46.dp
+                    }
+                )
+                .padding(horizontal = 32.dp)
+        ) {
+            Text(
+                text = "Tentar Novamente",
+                fontSize = when {
+                    isLargeTablet -> 16.sp
+                    isTablet -> 15.sp
+                    isSmallScreen -> 13.sp
+                    else -> 14.sp
+                },
+                fontWeight = FontWeight.Medium
+            )
+        }
+    }
+}
+
+@Composable
+private fun EmptySection(
+    isTablet: Boolean,
+    isSmallScreen: Boolean,
+    isLargeTablet: Boolean,
+    white: Color,
+    grayText: Color
+) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Icon(
+            Icons.Default.FitnessCenter,
+            contentDescription = "Sem treinos",
+            tint = grayText.copy(alpha = 0.5f),
+            modifier = Modifier.size(
+                when {
+                    isLargeTablet -> 80.dp
+                    isTablet -> 70.dp
+                    isSmallScreen -> 50.dp
+                    else -> 60.dp
+                }
+            )
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "Nenhum plano de treino disponível",
+            color = grayText,
+            fontSize = when {
+                isLargeTablet -> 18.sp
+                isTablet -> 16.sp
+                isSmallScreen -> 14.sp
+                else -> 15.sp
+            },
+            fontWeight = FontWeight.Medium
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "Os treinos aparecerão aqui quando disponíveis",
+            color = grayText.copy(alpha = 0.7f),
+            fontSize = when {
+                isLargeTablet -> 14.sp
+                isTablet -> 13.sp
+                isSmallScreen -> 11.sp
+                else -> 12.sp
+            },
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            modifier = Modifier.padding(horizontal = 32.dp)
+        )
+    }
+}
+
+@Composable
+private fun TreinosListSection(
+    planosTreino: List<PlanoTreino>,
+    snackbarHostState: SnackbarHostState,
+    scope: kotlinx.coroutines.CoroutineScope,
+    horizontalPadding: Dp,
+    verticalPadding: Dp,
+    cardSpacing: Dp,
+    isTablet: Boolean,
+    isSmallScreen: Boolean,
+    isLargeTablet: Boolean,
+    white: Color,
+    grayText: Color,
+    darkSurface: Color,
+    accentRed: Color,
+    cardColors: Map<String, Pair<Color, Color>>
+) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(
+            horizontal = horizontalPadding,
+            vertical = verticalPadding
+        ),
+        verticalArrangement = Arrangement.spacedBy(cardSpacing)
+    ) {
+        item {
+            Column {
+                Text(
+                    text = "${planosTreino.size} planos encontrados",
+                    color = grayText,
+                    fontSize = when {
+                        isLargeTablet -> 16.sp
+                        isTablet -> 15.sp
+                        isSmallScreen -> 13.sp
+                        else -> 14.sp
+                    },
+                    fontWeight = FontWeight.Medium
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+        }
+
+        items(planosTreino) { plano ->
+            CardPlanoTreino(
+                plano = plano,
+                onClick = {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(
+                            "Treino '${plano.titulo}' iniciado!"
+                        )
+                    }
+                },
+                isTablet = isTablet,
+                isSmallScreen = isSmallScreen,
+                isLargeTablet = isLargeTablet,
+                white = white,
+                grayText = grayText,
+                darkSurface = darkSurface,
+                accentRed = accentRed,
+                cardColors = cardColors
+            )
+        }
+    }
+}
+@Composable
+private fun CardPlanoTreino(
+    plano: PlanoTreino,
+    onClick: () -> Unit,
+    isTablet: Boolean,
+    isSmallScreen: Boolean,
+    isLargeTablet: Boolean,
+    white: Color,
+    grayText: Color,
+    darkSurface: Color,
+    accentRed: Color,
+    cardColors: Map<String, Pair<Color, Color>>
+) {
