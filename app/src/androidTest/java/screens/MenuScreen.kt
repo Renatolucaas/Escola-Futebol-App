@@ -67,3 +67,55 @@ fun MenuScreen(
         ) {
 
 }
+// ✅ Informações do usuário (só mostra se existir)
+            currentUser?.let { user ->
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFF262626)
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp)
+                    ) {
+                        Text(
+                            text = "👤 ${user.nome}",
+                            color = Color.White,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "📧 ${user.email}",
+                            color = Color(0xFFB3B3B3),
+                            fontSize = 14.sp
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "🎯 Tipo: ${user.tipo_usuario.uppercase()}",
+                            color = when (user.tipo_usuario) {
+                                "admin" -> Color(0xFFEF4444)
+                                "tecnico" -> Color(0xFF3B82F6)
+                                else -> Color(0xFF10B981)
+                            },
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                }
+            }
+
+            // Opções do menu
+            MenuOption(
+                icon = Icons.Default.Event,
+                title = "Agenda",
+                description = "Ver e gerenciar eventos",
+                onClick = { navController.navigate("agenda") }
+            )
+
+            MenuOption(
+                icon = Icons.Default.SportsSoccer,
+                title = "Treinos",
+                description = "Acompanhar treinos",
+                onClick = { navController.navigate("treino") }
+            )
