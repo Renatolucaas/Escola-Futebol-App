@@ -672,3 +672,196 @@ private fun RegisterContent(
                 }
             }
 
+            // BOTÃO CADASTRAR
+            Button(
+                onClick = onRegisterClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(buttonHeight)
+                    .shadow(
+                        elevation = shadowElevation * 0.75f,
+                        shape = RoundedCornerShape(cornerRadius * 0.75f)
+                    ),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = accentRed,
+                    contentColor = white
+                ),
+                shape = RoundedCornerShape(cornerRadius * 0.75f),
+                enabled = !isLoading && successMessage == null
+            ) {
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        color = white,
+                        strokeWidth = 3.dp,
+                        modifier = Modifier.size(buttonHeight * 0.4f)
+                    )
+                } else {
+                    Text(
+                        text = if (successMessage != null) "Conta Criada!" else "Criar Conta",
+                        fontSize = fontSizeBody,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
+            // VOLTAR PARA LOGIN
+            TextButton(
+                onClick = onBackToLoginClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(buttonHeight * 0.85f)
+            ) {
+                Text(
+                    text = "Já tem uma conta? Fazer login",
+                    color = accentRedLight,
+                    fontSize = fontSizeSmall,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun StandardTextField(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    placeholder: String,
+    keyboardType: KeyboardType,
+    textFieldHeight: Dp,
+    fontSizeBody: androidx.compose.ui.unit.TextUnit,
+    iconSize: Dp,
+    white: Color,
+    grayText: Color,
+    grayDark: Color,
+    accentRed: Color,
+    cornerRadius: Dp
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Text(
+            text = label,
+            color = white,
+            fontSize = fontSizeBody,
+            fontWeight = FontWeight.Medium
+        )
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(textFieldHeight),
+            placeholder = {
+                Text(
+                    placeholder,
+                    color = grayText.copy(alpha = 0.6f),
+                    fontSize = fontSizeBody
+                )
+            },
+            leadingIcon = {
+                Icon(
+                    icon,
+                    contentDescription = label,
+                    tint = grayText,
+                    modifier = Modifier.size(iconSize)
+                )
+            },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = white,
+                unfocusedTextColor = white,
+                focusedBorderColor = accentRed,
+                unfocusedBorderColor = grayDark,
+                cursorColor = accentRed,
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                focusedLeadingIconColor = accentRed,
+                unfocusedLeadingIconColor = grayText
+            ),
+            shape = RoundedCornerShape(cornerRadius * 0.65f),
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+            textStyle = androidx.compose.ui.text.TextStyle(fontSize = fontSizeBody)
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PasswordTextField(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholder: String,
+    passwordVisible: Boolean,
+    onPasswordVisibleChange: () -> Unit,
+    textFieldHeight: Dp,
+    fontSizeBody: androidx.compose.ui.unit.TextUnit,
+    iconSize: Dp,
+    white: Color,
+    grayText: Color,
+    grayDark: Color,
+    accentRed: Color,
+    cornerRadius: Dp
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Text(
+            text = label,
+            color = white,
+            fontSize = fontSizeBody,
+            fontWeight = FontWeight.Medium
+        )
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(textFieldHeight),
+            placeholder = {
+                Text(
+                    placeholder,
+                    color = grayText.copy(alpha = 0.6f),
+                    fontSize = fontSizeBody
+                )
+            },
+            leadingIcon = {
+                Icon(
+                    Icons.Default.Lock,
+                    contentDescription = null,
+                    tint = grayText,
+                    modifier = Modifier.size(iconSize)
+                )
+            },
+            trailingIcon = {
+                IconButton(
+                    onClick = onPasswordVisibleChange,
+                    modifier = Modifier.size(iconSize * 1.5f)
+                ) {
+                    Icon(
+                        if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                        contentDescription = null,
+                        tint = grayText,
+                        modifier = Modifier.size(iconSize)
+                    )
+                }
+            },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = white,
+                unfocusedTextColor = white,
+                focusedBorderColor = accentRed,
+                unfocusedBorderColor = grayDark,
+                cursorColor = accentRed,
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                focusedLeadingIconColor = accentRed,
+                unfocusedLeadingIconColor = grayText
+            ),
+            shape = RoundedCornerShape(cornerRadius * 0.65f),
+            singleLine = true,
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            textStyle = androidx.compose.ui.text.TextStyle(fontSize = fontSizeBody)
+        )
+    }
+
+
