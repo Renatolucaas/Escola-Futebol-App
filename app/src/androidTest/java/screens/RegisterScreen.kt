@@ -573,3 +573,102 @@ private fun RegisterContent(
                 accentRed = accentRed,
                 cornerRadius = cornerRadius
             )
+
+             // Campo Email
+            StandardTextField(
+                label = "Email",
+                value = email,
+                onValueChange = onEmailChange,
+                icon = Icons.Default.Email,
+                placeholder = "seu.email@exemplo.com",
+                keyboardType = KeyboardType.Email,
+                textFieldHeight = textFieldHeight,
+                fontSizeBody = fontSizeBody,
+                iconSize = iconSize,
+                white = white,
+                grayText = grayText,
+                grayDark = grayDark,
+                accentRed = accentRed,
+                cornerRadius = cornerRadius
+            )
+
+            // Campo Senha
+            PasswordTextField(
+                label = "Senha",
+                value = password,
+                onValueChange = onPasswordChange,
+                placeholder = "Mínimo 6 caracteres",
+                passwordVisible = passwordVisible,
+                onPasswordVisibleChange = onPasswordVisibleChange,
+                textFieldHeight = textFieldHeight,
+                fontSizeBody = fontSizeBody,
+                iconSize = iconSize,
+                white = white,
+                grayText = grayText,
+                grayDark = grayDark,
+                accentRed = accentRed,
+                cornerRadius = cornerRadius
+            )
+
+            // Campo Confirmar Senha
+            PasswordTextField(
+                label = "Confirmar Senha",
+                value = confirmPassword,
+                onValueChange = onConfirmPasswordChange,
+                placeholder = "Digite novamente sua senha",
+                passwordVisible = confirmPasswordVisible,
+                onPasswordVisibleChange = onConfirmPasswordVisibleChange,
+                textFieldHeight = textFieldHeight,
+                fontSizeBody = fontSizeBody,
+                iconSize = iconSize,
+                white = white,
+                grayText = grayText,
+                grayDark = grayDark,
+                accentRed = accentRed,
+                cornerRadius = cornerRadius
+            )
+
+            // MENSAGEM DE ERRO
+            if (errorMessage != null) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = accentRed.copy(alpha = 0.1f),
+                            shape = RoundedCornerShape(cornerRadius * 0.7f)
+                        )
+                        .padding(20.dp),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    Text(
+                        text = errorMessage,
+                        color = accentRedLight,
+                        fontSize = fontSizeSmall,
+                        fontWeight = FontWeight.Medium,
+                        lineHeight = fontSizeSmall * 1.5f
+                    )
+                }
+            }
+
+            // MENSAGEM DE SUCESSO
+            if (successMessage != null) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = successGreen.copy(alpha = 0.1f),
+                            shape = RoundedCornerShape(cornerRadius * 0.7f)
+                        )
+                        .padding(20.dp),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    Text(
+                        text = successMessage,
+                        color = successGreen,
+                        fontSize = fontSizeSmall,
+                        fontWeight = FontWeight.Medium,
+                        lineHeight = fontSizeSmall * 1.5f
+                    )
+                }
+            }
+
