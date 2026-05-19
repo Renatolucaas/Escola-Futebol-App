@@ -162,3 +162,90 @@ fun LoginScreen(navController: NavController) {
         isSmallScreen -> 20.dp
         else -> 24.dp
 
+        }
+
+    // ✅ VIEWMODEL E ESTADOS
+    val authViewModel: AuthViewModel = viewModel()
+    val authState by authViewModel.authState.collectAsState()
+
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
+
+    // Cores modernas com gradiente
+    val darkBackground = Color(0xFF0D0D0D)
+    val darkSurface = Color(0xFF1A1A1A)
+    val accentRed = Color(0xFFE65C5C)
+    val accentRedLight = Color(0xFFFF7B7B)
+    val white = Color(0xFFFFFFFF)
+    val grayText = Color(0xFFB3B3B3)
+    val grayDark = Color(0xFF404040)
+
+    // ✅ EFEiTO PARA NAVEGAR QUANDO LOGIN FOR BEM-SUCEDIDO
+    LaunchedEffect(authState) {
+        when (authState) {
+            is AuthState.Success -> {
+                try {
+                    val userName = authViewModel.getCurrentUserName()
+                    println("✅ Navegando para Welcome com nome: $userName")
+                    navController.navigate("welcome/$userName") {
+                        popUpTo("login") { inclusive = true }
+                    }
+                } catch (e: Exception) {
+                    println("⚠️ Erro ao obter nome do usuário: ${e.message}")
+                    // Em caso de erro, navega com nome padrão
+                    navController.navigate("welcome/Jogador") {
+                        popUpTo("login") { inclusive = true }
+                    }
+                }
+            }
+            else -> {}
+        }
+    }
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = darkBackground
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFF1A1A1A),
+                            darkBackground
+                        )
+                    )
+                )
+        ) {
+            // ✅ LAYOUT RESPONSIVO - Column para mobile, Row para tablet
+            if (isTablet) {
+                // ✅ LAYOUT TABLET - Lado a lado
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontalPadding),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // Lado esquerdo - Logo e informações
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 48.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(28.dp)
+                        ) {
+                            LogoSection(
+                                logoSize = logoSize,
+                                white = white,
+                                grayDark = grayDark,
+                                darkSurface = darkSurface,
+                                fontSizeTitle = fontSizeTitle,
+                                grayText = grayText
+                            )
+
+
